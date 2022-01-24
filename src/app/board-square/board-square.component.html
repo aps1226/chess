@@ -1,0 +1,5 @@
+<div id="{{column + row}}" class="board-square {{color}}">
+    <ng-template [ngIf]="piece">
+        <app-board-piece [piece]="piece"></app-board-piece>
+    </ng-template>
+</div>
