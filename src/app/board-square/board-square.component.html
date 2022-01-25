@@ -1,4 +1,9 @@
-<div id="{{column + row}}" class="board-square {{color}}">
+<div 
+    id="{{column + row}}" 
+    class="board-square {{color}}" 
+    [cdkDropListData]="column + row"
+    cdkDropList
+>
     <ng-template [ngIf]="piece">
         <app-board-piece [piece]="piece"></app-board-piece>
     </ng-template>

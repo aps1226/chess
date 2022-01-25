@@ -1,3 +1,7 @@
-<div>
+<div 
+    cdkDrag
+    [cdkDragData]="piece"
+    (cdkDragDropped)="handleDrop($event)"
+>
     <img class='piece' src={{piece.src}}>
 </div>
