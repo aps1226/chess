@@ -1,11 +1,12 @@
 <body>
-    <div class="chess-board">
+    <div class="chess-board" cdkDropListGroup>
         <ng-container *ngFor="let row of rows; let i = index">
             <ng-container *ngFor="let col of columns; let j = index">
                 <app-board-square 
                     [column] = "col" 
                     [row] = "row" 
                     [color] = colors[((i%2)+(j%2))%2]
+                    [pieces] = "pieces | async"
                 >
                 </app-board-square>
             </ng-container>

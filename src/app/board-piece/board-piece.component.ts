@@ -1,7 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { pieces } from '../pieces';
+import { Store } from '@ngrx/store';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
-import { IPiece } from '../pieces.model';
+import { AppState } from '../state/app.state';
+import * as PiecesActions from '../state/pieces.actions';
+import { pieces } from '../state/pieces';
+import { IPiece } from '../state/pieces.model';
 
 @Component({
   selector: 'app-board-piece',
@@ -12,9 +16,16 @@ export class BoardPieceComponent implements OnInit {
 
   @Input('piece') piece!:IPiece;
 
-  constructor() { }
+  constructor(private store: Store<AppState>) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  handleDrop(event: CdkDragDrop<string>){
+    const newPiece: IPiece= {
+      ...this.piece,
+      ...{location:event.container.data}
+    };
+    this.store.dispatch(PiecesActions.modifyPiece({piece:newPiece}))
   }
 
 }
