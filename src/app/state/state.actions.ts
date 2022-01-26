@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { IPiece } from './pieces.model';
+import { IBoardSquare, IPiece } from './model';
 
 
 export const modifyPiece = createAction(
@@ -13,6 +13,12 @@ export const removePiece = createAction(
   props<{ pieceName: string }>()
 );
 
-export const getPieces = createAction(
-  '[PIECES] GET',
+export const incrementTurn = createAction(
+  '[TURN] INCREMENT',
 );
+
+export const modifyBoardSquare = createAction(
+  '[BOARD SQUARE] MODIFY',
+  props<{ boardSquare: IBoardSquare }>()
+);
+

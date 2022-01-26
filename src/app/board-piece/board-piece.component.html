@@ -1,6 +1,10 @@
 <div 
     cdkDrag
     [cdkDragData]="piece"
+    [cdkDragDisabled]="piece.draggable"
+    [cdkDragConstrainPosition]= "renderPosition"
+    (cdkDragMoved)="handleDragMove($event)"
+    (cdkDragStarted)="handleDragStart($event)"
     (cdkDragDropped)="handleDrop($event)"
 >
     <img class='piece' src={{piece.src}}>
