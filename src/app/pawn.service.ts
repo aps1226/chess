@@ -1,45 +1,33 @@
 import { Injectable } from '@angular/core';
-import {CdkDragDrop, CdkDragStart, DragRef, Point} from '@angular/cdk/drag-drop';
-import { IBoardSquare, IPiece } from './state/model';
+import {Point} from '@angular/cdk/drag-drop';
+import { IBoardSquare, IPiece, Columns } from './state/model';
+import { columns } from './state/columns';
 import { stringify } from 'querystring';
-
-interface Columns {
-  [key: string]: number;
-}
+import { pieces } from './state/pieces';
 
 @Injectable()
 export class PawnService {
 
-  columns:Columns = {
-    'a':0,
-    'b':1,
-    'c':2,
-    'd':3,
-    'e':4,
-    'f':5,
-    'g':6,
-    'h':7,
-  }
-  constructor(){ }
+  constructor(){}
 
   move(
     curPos:Point,
     curPiece: IPiece,
     pieces: IPiece[],
-    boadSquares: IBoardSquare[],
-    ):Point
-    {
+    boardSquares: IBoardSquare[],
+    ){
+
     const {color,location,moved} = curPiece;
 
     const viablePos = this.getViablePos(
       curPiece,
       pieces,
-      boadSquares,
+      boardSquares,
       location,
       moved,
       color,
     );
-    console.log(viablePos)
+
     const{
       x:curX,
       y:curY
@@ -67,7 +55,7 @@ export class PawnService {
   getViablePos(
     curPiece:IPiece,
     pieces:IPiece[],
-    boadSquares:IBoardSquare[],
+    boardSquares:IBoardSquare[],
     location:string,
     moved:boolean,
     color:string,
@@ -78,32 +66,43 @@ export class PawnService {
     const row = Number(location.split('')[1]);
 
     res.push(
-      ...boadSquares.filter(({square}) =>{
-        return (
-          curPiece.location === square ||
-          (!moved && color === 'white' && col+String(row+1) === square) ||
-          (!moved && color === 'white' && col+String(row+2) === square) ||
-          (!moved && color === 'black' && col+String(row-1) === square) ||
-          (!moved && color === 'black' && col+String(row-2) === square) 
-        )
-      }),
-      ...this.canTakePiece(
-        curPiece,
-        pieces,
-        boadSquares,
-        color,
-        row,
-        col,
-      )
-    );
+      ...boardSquares
+        .filter(({square}) =>{
+          return (
+            curPiece.location === square ||
+            (color === 'white' && (col+String(row+1)) === square) ||
+            (!moved && color === 'white' && (col+String(row+2)) === square) ||
+            (color === 'black' && (col+String(row-1)) === square) ||
+            (!moved && color === 'black' && (col+String(row-2)) === square) 
+          )
+        })
+        .filter(({square}) => {
+          return (
+            !pieces.filter(({location}) => 
+              (location == square && location !== curPiece.location) ||
+              // Stop white pawn from jumping over another.
+              (curPiece.color === 'white' && square === `${col+(row+2)}` && location === `${col+(row+1)}` ) ||
+              // Stop black pawn from jumping over another.
+              (curPiece.color === 'black' && square === `${col+(row-2)}` && location === `${col+(row-1)}` )
+            ).length
+          )
+        }),
+      ...this.attackDiagonal(
+      curPiece,
+      pieces,
+      boardSquares,
+      color,
+      row,
+      col,
+    ));
 
     return res;
   }
 
-  canTakePiece(
+  attackDiagonal(
     curPiece:IPiece,
     pieces:IPiece[],
-    boadSquares:IBoardSquare[],
+    boardSquares:IBoardSquare[],
     color:string,
     row:number,
     col:string,
@@ -111,7 +110,7 @@ export class PawnService {
     let targetRow: number;
     let targetCol1: string|null;
     let targetCol2: string|null;
-    const curColNumber = this.columns[col];
+    const curColNumber = columns[col];
     const targets:string[] = [];
 
     if(color === 'white'){
@@ -122,7 +121,7 @@ export class PawnService {
     const cols = [1,-1];
     for(const col of cols){
       const letter = String.fromCharCode(97 + curColNumber + col);
-      if(this.columns[letter]){
+      if(columns[letter]){
         const targetPos = letter + targetRow;
         targets.push(targetPos);
       }
@@ -131,10 +130,36 @@ export class PawnService {
     for(const target of targets){
       if(pieces.filter((piece) => piece.location === target).length){
         res.push(
-          ...boadSquares.filter(({square}) => square === target)
+          ...boardSquares.filter(({square}) => square === target)
         );
       }
     }
     return res;
   }
+
+  hasInCheck(
+    kingPos:string,
+    pawn:IPiece,
+  ){
+    const {color,location} = pawn;
+    const col = location.split('')[0];
+    const curColNumber = columns[col];
+    const row = Number(location.split('')[1]);
+
+    const checkPos = [];
+    
+    if(color === 'white' &&
+      (`${String.fromCharCode(97 + curColNumber+1)+(row+1)}` === kingPos ||
+      `${String.fromCharCode(97 + curColNumber-1)+(row+1)}` === kingPos)
+    ) checkPos.push(pawn.location);
+
+    if(
+      color === 'black' &&
+      (`${String.fromCharCode(97 + curColNumber+1)+(row-1)}` === kingPos ||
+      `${String.fromCharCode(97 + curColNumber-1)+(row-1)}` === kingPos)
+    ) checkPos.push(pawn.location);
+
+    return checkPos;
+  }
+
 }
