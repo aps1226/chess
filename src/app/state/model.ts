@@ -5,6 +5,7 @@ export interface IPiece {
     moved:boolean;
     color:string;
     draggable:boolean;
+    type:string;
 }
 
 export interface IBoardSquare {
@@ -16,4 +17,8 @@ export interface IBoardSquare {
     height:string;
     x:number;
     y:number;
+}
+
+export interface Columns {
+    [key: string]: number;
 }

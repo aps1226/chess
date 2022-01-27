@@ -13,6 +13,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'rook',
     },
     {
         name:'blackKnight_1',
@@ -20,7 +21,8 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackKnight.png'),
         moved:false,
         color:'black',
-        draggable:true
+        draggable:true,
+        type:'knight',
     },
     {
         name:'blackBishop_1',
@@ -29,6 +31,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'bishop',
     },
     {
         name:'blackKing',
@@ -37,6 +40,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'king',
     },
     {
         name:'blackQueen',
@@ -45,6 +49,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'queen',
     },
     {
         name:'blackBishop_2',
@@ -53,6 +58,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'bishop',
     },
     {
         name:'blackKnight_2',
@@ -61,6 +67,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'knight',
     },
     {
         name:'blackRook_2',
@@ -69,14 +76,16 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'rook',
     },
     {
-        name:'blackawn_1',
+        name:'blackPawn_1',
         location:'a7',
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
         draggable:true,
+        type:'pawn',
     },
     {
         name:'blackPawn_2',
@@ -84,7 +93,8 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
-        draggable:true
+        draggable:true,
+        type:'pawn',
     },
     {
         name:'blackPawn_3',
@@ -93,6 +103,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'pawn',
     },
     {
         name:'Pawn_4',
@@ -101,6 +112,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'pawn',
     },
     {
         name:'blackPawn_5',
@@ -109,6 +121,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'pawn',
     },
     {
         name:'blackPawn_6',
@@ -117,6 +130,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'pawn',
     },
     {
         name:'blackPawn_7',
@@ -125,6 +139,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'pawn',
     },
     {
         name:'blackPawn_8',
@@ -133,6 +148,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'black',
         draggable:true,
+        type:'pawn',
     },
     {
         name:'whitePawn_1',
@@ -141,6 +157,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'pawn',
     },
     {
         name:'whitePawn_2',
@@ -149,6 +166,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'pawn',
     },
     {
         name:'whitePawn_3',
@@ -157,6 +175,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'pawn',
     },
     {
         name:'whitePawn_4',
@@ -165,6 +184,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'pawn',
     },
     {
         name:'whitePawn_5',
@@ -173,6 +193,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'pawn',
     },
     {
         name:'whitePawn_6',
@@ -181,6 +202,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'pawn',
     },
     {
         name:'whitePawn_7',
@@ -189,6 +211,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'pawn',
     },
     {
         name:'whitePawn_8',
@@ -197,6 +220,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'pawn',
     },
     {
         name:'whiteRook_1',
@@ -205,6 +229,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'rook',
     },
     {
         name:'whiteKnight_1',
@@ -213,6 +238,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'knight',
     },
     {
         name:'whiteBishop_1',
@@ -221,6 +247,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'bishop',
     },
     {
         name:'whiteKing',
@@ -229,6 +256,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'king',
     },
     {
         name:'whiteQueen',
@@ -237,6 +265,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'queen',
     },
     {
         name:'whiteBishop_2',
@@ -245,6 +274,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'bishop',
     },
     {
         name:'whiteKnight_2',
@@ -253,6 +283,7 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'knight',
     },
     {
         name:'whiteRook_2',
@@ -261,5 +292,6 @@ export const pieces:IPiece[] = [
         moved:false,
         color:'white',
         draggable:false,
+        type:'rook',
     },
 ]

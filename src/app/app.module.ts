@@ -10,6 +10,11 @@ import { ChessBoardComponent } from './chess-board/chess-board.component';
 import { BoardSquareComponent } from './board-square/board-square.component';
 import { BoardPieceComponent } from './board-piece/board-piece.component';
 import { PawnService } from './pawn.service';
+import { RookService } from './rook.service';
+import { KnightService } from './knight.service';
+import { BishopService } from './bishop.service';
+import { QueenService } from './queen.service';
+import { KingService } from './king.service';
 
 @NgModule({
   declarations: [
@@ -30,6 +35,11 @@ import { PawnService } from './pawn.service';
   ],
   providers: [
     PawnService,
+    RookService,
+    KnightService,
+    BishopService,
+    QueenService,
+    KingService
   ],
   bootstrap: [AppComponent]
 })
