@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RookService } from './rook.service';
+import { RookService } from '../rook.service';
 
 describe('RookService', () => {
   let service: RookService;
