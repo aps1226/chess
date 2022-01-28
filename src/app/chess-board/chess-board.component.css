@@ -3,6 +3,7 @@
 }
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -12,7 +13,21 @@ body {
     padding: 0;
 }
 
-.chess-board {
+.column-container {
+    display: flex;
+    flex-direction: row; 
+    justify-content: right;
+    margin-left: 50px;
+}
+
+.board-row-container {
+    display: flex;
+    flex-direction: row;
+    align-content: right;
+    justify-content: right;
+}
+
+.game-board {
     position:relative;
     height: 1024px;
     width: 1024px;
@@ -21,3 +36,119 @@ body {
     grid-template-rows: repeat(8,128px);
     border: 3px solid black;
 }
+
+.column-letter {
+    width:128.75px;
+    height:50px;
+    box-sizing: border-box;
+    border: 3px solid black;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+}
+
+.row-number{
+    height:128.75px;
+    width:50px;
+    box-sizing: border-box;
+    border: 3px solid black;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+}
+
+@media (max-height: 800px){
+    .game-board {
+        height: 300px;
+        width: 300px;
+        grid-template-columns: repeat(8,37.5px);
+        grid-template-rows: repeat(8,37.5px);
+    }
+    .column-container {
+        margin-left: 30px;
+    }
+    .column-letter {
+        width:38.25px;
+        height:30px;
+        font-size: 1em;
+        border: 1.5px solid black;
+    }
+    
+    .row-number{
+        height:38.25px;
+        width:30px;
+        font-size: 1em;
+        border: 1.5px solid black;
+    }
+}
+
+@media (min-height: 801px) and (max-height: 1024px){
+    .game-board {
+        height: 400px;
+        width: 400px;
+        grid-template-columns: repeat(8,50px);
+        grid-template-rows: repeat(8,50px);
+    }
+    .column-container {
+        margin-left: 30px;
+    }
+    .column-letter {
+        width:50.75px;
+        height:30px;
+        font-size: 1em;
+        border: 1.5px solid black;
+    }
+    
+    .row-number{
+        height:50.75px;
+        width:30px;
+        font-size: 1em;
+        border: 1.5px solid black;
+    }
+}
+
+@media (min-height: 1025px) and (max-height: 1200px){
+    .game-board {
+        height: 800px;
+        width: 800px;
+        grid-template-columns: repeat(8,100px);
+        grid-template-rows: repeat(8,100px);
+    }
+    .column-container {
+        margin-left: 40px;
+    }
+    .column-letter {
+        width:100.75px;
+        height:40px;
+        font-size: 2em;
+        border: 1.5px solid black;
+    }
+    
+    .row-number{
+        height:100.75px;
+        width:40px;
+        font-size: 2em;
+        border: 1.5px solid black;
+    }
+}
+
+/* @media (max-width: 1152px) {
+    .game-board {
+        height: 450px;
+        width: 450px;
+        grid-template-columns: repeat(8,56.25px);
+        grid-template-rows: repeat(8,56.25px);
+    }
+}
+
+@media (max-width: 1680px) {
+    .game-board {
+        height: 800px;
+        width: 800px;
+        grid-template-columns: repeat(8,100px);
+        grid-template-rows: repeat(8,100px);
+    }
+} */
+
