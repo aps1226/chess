@@ -1,14 +1,30 @@
 <body>
-    <div class="chess-board" cdkDropListGroup>
-        <ng-container *ngFor="let row of rows; let i = index">
-            <ng-container *ngFor="let col of columns; let j = index">
-                <app-board-square 
-                    [column] = "col" 
-                    [row] = "row" 
-                    [color] = colors[((i%2)+(j%2))%2]
-                >
-                </app-board-square>
-            </ng-container>
+    <div class='column-container'>
+        <ng-container *ngFor="let col of columns">
+            <div class='column-letter' >
+                {{col.toUpperCase()}}
+            </div>
         </ng-container>
+    </div>
+    <div class='board-row-container'>
+        <div>
+            <ng-container *ngFor="let row of rows">
+                <div class='row-number'>
+                    {{row}}
+                </div>
+            </ng-container>
+        </div>
+        <div class="game-board" cdkDropListGroup>
+            <ng-container *ngFor="let row of rows; let i = index">
+                <ng-container *ngFor="let col of columns; let j = index">
+                    <app-board-square 
+                        [column] = "col" 
+                        [row] = "row" 
+                        [color] = colors[((i%2)+(j%2))%2]
+                    >
+                    </app-board-square>
+                </ng-container>
+            </ng-container>
+        </div>
     </div>
 </body>
