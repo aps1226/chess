@@ -12,7 +12,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackRook.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'rook',
     },
     {
@@ -21,7 +20,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackKnight.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'knight',
     },
     {
@@ -30,7 +28,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackBishop.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'bishop',
     },
     {
@@ -39,7 +36,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackKing.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'king',
     },
     {
@@ -48,7 +44,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackQueen.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'queen',
     },
     {
@@ -57,7 +52,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackBishop.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'bishop',
     },
     {
@@ -66,7 +60,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackKnight.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'knight',
     },
     {
@@ -75,7 +68,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackRook.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'rook',
     },
     {
@@ -84,7 +76,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'pawn',
     },
     {
@@ -93,7 +84,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'pawn',
     },
     {
@@ -102,16 +92,14 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'pawn',
     },
     {
-        name:'Pawn_4',
+        name:'blackPawn_4',
         location:'d7',
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'pawn',
     },
     {
@@ -120,7 +108,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'pawn',
     },
     {
@@ -129,7 +116,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'pawn',
     },
     {
@@ -138,7 +124,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'pawn',
     },
     {
@@ -147,7 +132,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/BlackPawn.png'),
         moved:false,
         color:'black',
-        draggable:true,
         type:'pawn',
     },
     {
@@ -156,7 +140,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhitePawn.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'pawn',
     },
     {
@@ -165,7 +148,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhitePawn.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'pawn',
     },
     {
@@ -174,7 +156,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhitePawn.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'pawn',
     },
     {
@@ -183,7 +164,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhitePawn.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'pawn',
     },
     {
@@ -192,7 +172,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhitePawn.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'pawn',
     },
     {
@@ -201,7 +180,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhitePawn.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'pawn',
     },
     {
@@ -210,7 +188,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhitePawn.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'pawn',
     },
     {
@@ -219,7 +196,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhitePawn.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'pawn',
     },
     {
@@ -228,7 +204,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhiteRook.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'rook',
     },
     {
@@ -237,7 +212,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhiteKnight.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'knight',
     },
     {
@@ -246,7 +220,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhiteBishop.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'bishop',
     },
     {
@@ -255,7 +228,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhiteKing.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'king',
     },
     {
@@ -264,7 +236,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhiteQueen.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'queen',
     },
     {
@@ -273,7 +244,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhiteBishop.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'bishop',
     },
     {
@@ -282,7 +252,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhiteKnight.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'knight',
     },
     {
@@ -291,7 +260,6 @@ export const pieces:IPiece[] = [
         src: path.join(__dirname,'/assets/WhiteRook.png'),
         moved:false,
         color:'white',
-        draggable:false,
         type:'rook',
     },
 ]

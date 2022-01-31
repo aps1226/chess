@@ -4,7 +4,7 @@ import { StoreModule } from '@ngrx/store';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
-import { piecesReducer, turnsReducer, boardSquaresReducer } from './state/state.reducer';
+import { piecesReducer, turnsReducer, boardSquaresReducer, checkReducer, selectionReducer } from './state/state.reducer';
 import { AppComponent } from './app.component';
 import { ChessBoardComponent } from './chess-board/chess-board.component';
 import { BoardSquareComponent } from './board-square/board-square.component';
@@ -15,6 +15,8 @@ import { KnightService } from './knight.service';
 import { BishopService } from './bishop.service';
 import { QueenService } from './queen.service';
 import { KingService } from './king.service';
+import { CheckService } from './check.service';
+import { PieceService } from './piece.service';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { KingService } from './king.service';
       pieces:piecesReducer,
       turns:turnsReducer,
       boardSquares:boardSquaresReducer,
+      check: checkReducer,
+      selection: selectionReducer
     }),
     AppRoutingModule,
     DragDropModule,
@@ -39,7 +43,9 @@ import { KingService } from './king.service';
     KnightService,
     BishopService,
     QueenService,
-    KingService
+    KingService,
+    CheckService,
+    PieceService,
   ],
   bootstrap: [AppComponent]
 })
