@@ -22,9 +22,7 @@ export class BishopService {
     const viablePos = this.getViablePos(
       curPiece,
       pieces,
-      boardSquares,
-      location,
-      color,
+      boardSquares
     );
 
     const{
@@ -55,10 +53,9 @@ export class BishopService {
     curPiece:IPiece,
     pieces:IPiece[],
     boardSquares:IBoardSquare[],
-    location:string,
-    color:string,
     ):IBoardSquare[]
     {
+    const { color,location } = curPiece;
     const res:IBoardSquare[] = [];
     const col = location.split('')[0];
     const row = Number(location.split('')[1]);
@@ -66,9 +63,8 @@ export class BishopService {
     const curColNumber = columns[col];
     const cols = Object.values(columns).sort((a,b) => a-b);
 
-    // Add current position.
     const curSquare = boardSquares.filter(({square}) => square === `${col + row}`)[0];
-    res.push(curSquare);
+
     // Check top right diagonal.
     for(let curCol = curColNumber + 1, curRow = row + 1; curCol <= cols[cols.length - 1] && curRow <= 8; curCol++, curRow++){
       const letter = String.fromCharCode(97 + curCol);
@@ -138,20 +134,6 @@ export class BishopService {
       res.push(curSquare)
     }
     return res;
-  }
-
-  hasInCheck(
-    kingPos: string,
-    bishop:IPiece,
-    boardSquares:IBoardSquare[],
-    pieces: IPiece[]
-  ){
-    const {location,color} = bishop;
-
-    const checkPos:IBoardSquare[] = [];
-
-
-    return checkPos;
   }
 
 }

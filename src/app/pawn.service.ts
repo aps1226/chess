@@ -4,64 +4,22 @@ import { IBoardSquare, IPiece, Columns } from './state/model';
 import { columns } from './state/columns';
 import { stringify } from 'querystring';
 import { pieces } from './state/pieces';
+import { CheckService } from './check.service';
 
 @Injectable()
 export class PawnService {
 
   constructor(){}
 
-  move(
-    curPos:Point,
-    curPiece: IPiece,
-    pieces: IPiece[],
-    boardSquares: IBoardSquare[],
-    ){
-
-    const {color,location,moved} = curPiece;
-
-    const viablePos = this.getViablePos(
-      curPiece,
-      pieces,
-      boardSquares,
-      location,
-      moved,
-      color,
-    );
-
-    const{
-      x:curX,
-      y:curY
-    } = curPos;
-
-    let closestPos:Point = {
-      x:curX,
-      y:curY,
-    }
-    let closestDist:number = Number.MAX_SAFE_INTEGER;
-
-    for(const pos of viablePos){
-      const {x,y} = pos;
-      const distance = Math.sqrt( 
-        Math.pow( Math.abs(x - curX), 2) + Math.pow( Math.abs(y - curY), 2) 
-      );
-      if(distance < closestDist){
-        closestDist = distance;
-        closestPos = {x,y};
-      }
-    }
-    return closestPos;
-  }
-
   getViablePos(
     curPiece:IPiece,
     pieces:IPiece[],
     boardSquares:IBoardSquare[],
-    location:string,
-    moved:boolean,
-    color:string,
     ):IBoardSquare[]
     {
-    const res:IBoardSquare[] = [];
+    
+    const res: IBoardSquare[] = [];
+    const {location,color,moved} = curPiece;
     const col = location.split('')[0];
     const row = Number(location.split('')[1]);
 
@@ -69,7 +27,6 @@ export class PawnService {
       ...boardSquares
         .filter(({square}) =>{
           return (
-            curPiece.location === square ||
             (color === 'white' && (col+String(row+1)) === square) ||
             (!moved && color === 'white' && (col+String(row+2)) === square) ||
             (color === 'black' && (col+String(row-1)) === square) ||
@@ -95,7 +52,7 @@ export class PawnService {
       row,
       col,
     ));
-
+    
     return res;
   }
 
@@ -137,29 +94,45 @@ export class PawnService {
     return res;
   }
 
-  hasInCheck(
-    kingPos:string,
+  positionsOfCheck(
     pawn:IPiece,
+    boardSquares:IBoardSquare[],
   ){
     const {color,location} = pawn;
     const col = location.split('')[0];
     const curColNumber = columns[col];
     const row = Number(location.split('')[1]);
 
-    const checkPos = [];
+    const posOfCheck = [];
+    // Add current position.
+    const curSquare = boardSquares.filter(({square}) => square === pawn.location)[0];
+    posOfCheck.push(curSquare);
     
-    if(color === 'white' &&
-      (`${String.fromCharCode(97 + curColNumber+1)+(row+1)}` === kingPos ||
-      `${String.fromCharCode(97 + curColNumber-1)+(row+1)}` === kingPos)
-    ) checkPos.push(pawn.location);
+    const diagonals = [];
+    // If the pawn is a white piece, add respective diagonals
+    // to the positions of check array.
+    if(color === 'white'){
+      diagonals.push(
+        `${String.fromCharCode(97 + curColNumber+1)+(row+1)}`,
+        `${String.fromCharCode(97 + curColNumber-1)+(row+1)}`,
+      );
+    }
+    // If the pawn is a black piece, add respective diagonals
+    // to the positions of check array.
+    if(color === 'black'){
+      diagonals.push(
+        `${String.fromCharCode(97 + curColNumber+1)+(row-1)}`,
+        `${String.fromCharCode(97 + curColNumber-1)+(row-1)}`,
+      );
+    }
+    for(const diagonal of diagonals){
+      const curSquare = boardSquares.filter(({square}) => square === diagonal)[0];
+      if(curSquare){
+        posOfCheck.push(curSquare);
+      }
+    }
 
-    if(
-      color === 'black' &&
-      (`${String.fromCharCode(97 + curColNumber+1)+(row-1)}` === kingPos ||
-      `${String.fromCharCode(97 + curColNumber-1)+(row-1)}` === kingPos)
-    ) checkPos.push(pawn.location);
-
-    return checkPos;
+    return posOfCheck;
   }
 
 }

@@ -4,7 +4,7 @@ import * as PiecesActions from './state.actions';
 import { pieces } from './pieces';
 import { ConstantPool } from '@angular/compiler';
 import { state } from '@angular/animations';
-import { IBoardSquare, IPiece } from './model';
+import { IBoardSquare, IPiece, Selection } from './model';
 import { boardSquares } from './boardSquares';
 
 const nextPlayersTurn = (pieces:IPiece[]) =>{
@@ -15,17 +15,22 @@ const initialPieces: IPiece[] = [...pieces];
 
 export const piecesReducer = createReducer(
     initialPieces,
-    on(PiecesActions.modifyPiece, (state, { piece }) =>{
+    on(PiecesActions.modifyPiece, (state, { piece,turns }) =>{
+        const playersTurn = turns % 2 === 0 ? 'black' : 'white';
         const newState = [ 
             ...state.filter(({name}) => name !== piece.name),
             piece
         ].map((item) =>{
+
             return {
                 ...item,
-                ...{draggable:!item.draggable}
+                ...{draggable: item.color === playersTurn}
             }
         })
         return newState;
+    }),
+    on(PiecesActions.modifyPieces, (state, { pieces }) =>{
+        return [...pieces];
     }),
     on(PiecesActions.removePiece, (state, { pieceName }) => {
         return [ ...state.filter(({name}) => name !== pieceName)]
@@ -48,5 +53,26 @@ export const boardSquaresReducer = createReducer(
             ...state.filter(({square}) => square !== boardSquare.square),
             boardSquare
         ];
+    })
+);
+
+const initialCheck: boolean = false;
+
+export const checkReducer = createReducer(
+    initialCheck,
+    on(PiecesActions.modifyCheck, (state, { check }) =>{
+        return check;
+    })
+);
+
+const initialSelection: Selection = {
+    ...pieces[0],
+    moves:[initialBoardSquares[0]]
+};
+
+export const selectionReducer = createReducer(
+    initialSelection,
+    on(PiecesActions.modifySelection, (state, { selection }) =>{
+        return selection;
     })
 );

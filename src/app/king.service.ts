@@ -1,78 +1,51 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import {Point} from '@angular/cdk/drag-drop';
+import { Observable } from 'rxjs';
 
 import { PawnService } from './pawn.service';
 import { RookService } from './rook.service';
 import { KnightService } from './knight.service';
 import { BishopService } from './bishop.service';
 import { QueenService } from './queen.service';
+import { AppState } from './state/app.state';
+import { getTurns } from './state/state.selector'
+import * as PiecesActions from './state/state.actions';
 import { columns } from './state/columns'; 
 import { IBoardSquare, IPiece, Columns} from './state/model';
 
+
+interface Memo {
+  [key: string]: true;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class KingService {
 
+  turn$: Observable<number>;
+  turns: number = 0;
+
   constructor(
+    private store: Store<AppState>,
     private pawnService: PawnService,
     private rookService: RookService,
     private knightService: KnightService,
     private bishopService: BishopService,
     private queenService: QueenService,
-  ) {}
-
-  move(
-    curPos:Point,
-    curPiece: IPiece,
-    pieces: IPiece[],
-    boardSquares: IBoardSquare[],
-  ){
-
-    const {color,location,moved} = curPiece;
-
-    const viablePos = this.getViablePos(
-      curPiece,
-      pieces,
-      boardSquares,
-      location,
-      moved,
-      color,
-    );
-
-    const{
-      x:curX,
-      y:curY
-    } = curPos;
-
-    let closestPos:Point = {
-      x:curX,
-      y:curY,
-    }
-    let closestDist:number = Number.MAX_SAFE_INTEGER;
-
-    for(const pos of viablePos){
-      const {x,y} = pos;
-      const distance = Math.sqrt( 
-        Math.pow( Math.abs(x - curX), 2) + Math.pow( Math.abs(y - curY), 2) 
-      );
-      if(distance < closestDist){
-        closestDist = distance;
-        closestPos = {x,y};
-      }
-    }
-    return closestPos;
+  ) {
+    this.turn$ = this.store.select(getTurns);
+    this.turn$.subscribe((turn$) => this.turns = turn$);
   }
+
 
   getViablePos(
     curPiece:IPiece,
     pieces:IPiece[],
     boardSquares:IBoardSquare[],
-    location:string,
-    moved:boolean,
-    color:string,
     ):IBoardSquare[]
     {
+    const {location,color} = curPiece;
     const res:IBoardSquare[] = [];
     const col = location.split('')[0];
     const row = Number(location.split('')[1]);
@@ -110,12 +83,11 @@ export class KingService {
         )
       })[0];
       const squareExists = boardSquares.filter(({square}) => square === posSquare)[0];
-      console.log(posSquares)
       if(!pathObstructed && squareExists){
         res.push(squareExists);
       }
     }
-    console.log(res)
+
     return res;
   }
 
@@ -123,96 +95,193 @@ export class KingService {
     pieces:IPiece[],
     boardSquares:IBoardSquare[],
   ){
+    const playersTurn = this.turns % 2 !== 0 ? 'black' : 'white';
     const posCaptureMoves = this.captureVectors(
-      pieces.filter(({draggable,type}) => draggable && type === 'king')[0],
-      pieces.filter(({draggable}) => draggable),
+      pieces,
+      pieces.filter(({color}) => color !== playersTurn),
       boardSquares
     );
-    // const posEscapeMoves = this.captureVectors(
-    //   pieces.filter(({draggable}) => !draggable),
-    //   boardSquares
-    // );
-
+    const king = pieces.filter(
+      ({color,type}) =>  color === playersTurn && type === 'king'
+    )[0];
+    const check = posCaptureMoves.filter(({square}) => square === king.location).length > 0;
+    return check
   }
 
-  captureVectors(
-    king:IPiece,
+  inCheckMate(
+    turns:number,
     pieces:IPiece[],
     boardSquares:IBoardSquare[],
   ){
-    const checkVectors = [];
-    for(const piece of pieces){
-      const {type,location,moved,color} = piece;
-      const col = location.split('')[0];
-      const row = Number(location.split('')[1]);
+    let checkMate = true;
+    const playersTurn = this.turns % 2 !== 0 ? 'black' : 'white';
+    const resPieces = pieces.filter(({color}) =>  color === playersTurn);
+    // Can the checked kings pieces escape the check.
+    const checkedPieces = [...pieces.filter(({color}) =>  color !== playersTurn)];
+    // Get all possible moves for each checked piece.
+    for(let checkedPiece of checkedPieces){
+      const moves = [];
+      const allPiecesExcluding = pieces.filter(({name}) => name !== checkedPiece.name);
+      const { type } = checkedPiece;
       switch(type){
         case 'pawn':
-          checkVectors.push(
-            ...this.pawnService.hasInCheck(
-              king.location,
-              piece
+          moves.push(
+            ...this.pawnService.getViablePos(
+              checkedPiece,
+              pieces,
+              boardSquares,
             )
           );
           break;
         case 'rook':
-          checkVectors.push(
-            ...this.rookService.hasInCheck(
-              king.location,
-              piece,
-              boardSquares,
-              pieces
+          moves.push(
+            ...this.rookService.getViablePos(
+              checkedPiece,
+              pieces,
+              boardSquares
             )
           )
           break;
         case 'knight':
-          checkVectors.push(
-            ...this.knightService.hasInCheck(
-              king.location,
-              piece,
-              boardSquares,
-              pieces
+          moves.push(
+            ...this.knightService.getViablePos(
+              checkedPiece,
+              pieces,
+              boardSquares
             )
           )
           break;
         case 'bishop':
-          checkVectors.push(
-            ...this.bishopService.hasInCheck(
-              king.location,
-              piece,
-              boardSquares,
-              pieces
+          moves.push(
+            ...this.bishopService.getViablePos(
+              checkedPiece,
+              pieces,
+              boardSquares
             )
           )
           break;
         case 'queen':
-          checkVectors.push(
+          moves.push(
             ...this.queenService.getViablePos(
-              piece,
+              checkedPiece,
               pieces,
-              boardSquares,
-              location,
-              moved,
-              color,
+              boardSquares
             )
           )
           break;
         case 'king':
-          checkVectors.push(
+          moves.push(
             ...this.getViablePos(
-              piece,
+              checkedPiece,
               pieces,
-              boardSquares,
-              location,
-              moved,
-              color,
+              boardSquares
             )
           )
           break;
         default:
           break;
       }
+      for(const move of moves){
+        const curPiece = {
+          ...checkedPiece,
+          location:move.square
+        };
+        const newPieces = [
+          ...allPiecesExcluding,
+          curPiece
+        ];
+        const stillInCheck = this.inCheck(
+          newPieces,
+          boardSquares
+        )
+        if(!stillInCheck){
+          checkMate = false;
+          break;
+        }
+      }
+      resPieces.push(checkedPiece);
     }
+    this.store.dispatch(PiecesActions.modifyPieces({pieces:resPieces}));
+    return checkMate;
+  }
 
+  captureVectors(
+    allPieces: IPiece[],
+    attackingPieces:IPiece[],
+    boardSquares:IBoardSquare[],
+  ){
+    const memo:Memo = {};
+    const checkVectors:IBoardSquare[] = [];
+    for(const piece of attackingPieces){
+      const {type,location,moved,color} = piece;
+      const col = location.split('')[0];
+      const row = Number(location.split('')[1]);
+      const res = [];
+      switch(type){
+        case 'pawn':
+          res.push(
+            ...this.pawnService.positionsOfCheck(
+              piece,
+              boardSquares
+            )
+          );
+          break;
+        case 'rook':
+          res.push(
+            ...this.rookService.getViablePos(
+              piece,
+              allPieces,
+              boardSquares
+            )
+          );
+          break;
+        case 'knight':
+          res.push(
+            ...this.knightService.getViablePos(
+              piece,
+              allPieces,
+              boardSquares
+            )
+          )
+          break;
+        case 'bishop':
+          res.push(
+            ...this.bishopService.getViablePos(
+              piece,
+              allPieces,
+              boardSquares
+            )
+          );
+          break;
+        case 'queen':
+          res.push(
+            ...this.queenService.getViablePos(
+              piece,
+              allPieces,
+              boardSquares
+            )
+          );
+          break;
+        case 'king':
+          res.push(
+            ...this.getViablePos(
+              piece,
+              allPieces,
+              boardSquares
+            )
+          );
+          break;
+        default:
+          break;
+      }
+      res.map((curSquare) =>{
+        if(!memo[curSquare.square]){
+          memo[curSquare.square] = true;
+          checkVectors.push(curSquare);
+        }
+      })
+    }
+    return checkVectors;
   }
 
 

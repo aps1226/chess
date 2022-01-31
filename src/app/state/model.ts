@@ -4,7 +4,6 @@ export interface IPiece {
     src:string;
     moved:boolean;
     color:string;
-    draggable:boolean;
     type:string;
 }
 
@@ -17,6 +16,10 @@ export interface IBoardSquare {
     height:string;
     x:number;
     y:number;
+}
+
+export interface Selection extends IPiece {
+    moves: IBoardSquare[];
 }
 
 export interface Columns {
