@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {Point} from '@angular/cdk/drag-drop';
+import { Point } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 
 import { PawnService } from './pawn.service';
@@ -8,20 +8,23 @@ import { RookService } from './rook.service';
 import { KnightService } from './knight.service';
 import { BishopService } from './bishop.service';
 import { QueenService } from './queen.service';
-import { AppState } from './state/app.state';
-import { getTurns } from './state/state.selector'
-import * as PiecesActions from './state/state.actions';
-import { columns } from './state/columns'; 
-import { IBoardSquare, IPiece, Columns} from './state/model';
-
+import { KingService } from './king.service';
+import { AppState } from '../state/app.state';
+import * as PiecesActions from '../state/state.actions';
+import { getTurns, getBoardSquares } from '../state/state.selector';
+import { IBoardSquare, IPiece } from '../state/model';
 
 interface Memo {
   [key: string]: true;
 }
+
 @Injectable({
   providedIn: 'root'
 })
-export class KingService {
+export class PieceService {
+  
+  boardSquare$: Observable<IBoardSquare[]>;
+  boardSquares: IBoardSquare[] = [];
 
   turn$: Observable<number>;
   turns: number = 0;
@@ -33,61 +36,144 @@ export class KingService {
     private knightService: KnightService,
     private bishopService: BishopService,
     private queenService: QueenService,
+    private kingService: KingService,
   ) {
+
+    this.boardSquare$ = this.store.select(getBoardSquares);
+    this.boardSquare$.subscribe((boardSquare$) =>this.boardSquares = [...boardSquare$]);
+
     this.turn$ = this.store.select(getTurns);
     this.turn$.subscribe((turn$) => this.turns = turn$);
   }
 
+  // Render position based on which possible move the piece
+  // is dragged, or dropped, closest to.
+  renderPosition(
+    curPos:Point,
+    curPiece: IPiece,
+    moves: IBoardSquare[],
+  ){
+    const{
+      x:curX,
+      y:curY
+    } = curPos;
 
-  getViablePos(
-    curPiece:IPiece,
-    pieces:IPiece[],
-    boardSquares:IBoardSquare[],
-    ):IBoardSquare[]
-    {
-    const {location,color} = curPiece;
-    const res:IBoardSquare[] = [];
-    const col = location.split('')[0];
-    const row = Number(location.split('')[1]);
+    let closestPos:Point = {
+      x:curX,
+      y:curY,
+    }
+    let closestDist:number = Number.MAX_SAFE_INTEGER;
 
-    const curColNumber = columns[col];
-    const cols = Object.values(columns).sort((a,b) => a-b);
-
-    // Add current position.
-    const curSquare = boardSquares.filter(({square}) => square === `${col + row}`)[0];
-    res.push(curSquare);
-    // Check Surrounding squares.
-    const posSquares =[
-      // Top Right
-      `${String.fromCharCode(97 + curColNumber+1)+(row+1)}`,
-      // Right
-      `${String.fromCharCode(97 + curColNumber+1)+(row)}`,
-      // Back Right
-      `${String.fromCharCode(97 + curColNumber+1)+(row - 1)}`,
-      // Back
-      `${String.fromCharCode(97 + curColNumber)+(row - 1)}`,
-      // Back Left
-      `${String.fromCharCode(97 + curColNumber - 1)+(row - 1)}`,
-      // Left
-      `${String.fromCharCode(97 + curColNumber - 1)+(row)}`,
-      // Front Left
-      `${String.fromCharCode(97 + curColNumber + 1)+(row + 1)}`,
-      // Front
-      `${String.fromCharCode(97 + curColNumber)+(row + 1)}`,
-    ]
-    for(const posSquare of posSquares){
-      const pathObstructed = pieces.filter(({location,color}) =>{
-        return(
-          location === posSquare &&
-          color === curPiece.color
-        )
-      })[0];
-      const squareExists = boardSquares.filter(({square}) => square === posSquare)[0];
-      if(!pathObstructed && squareExists){
-        res.push(squareExists);
+    for(const move of moves){
+      const {x,y} = move;
+      const distance = Math.sqrt( 
+        Math.pow( Math.abs(x - curX), 2) + Math.pow( Math.abs(y - curY), 2) 
+      );
+      if(distance < closestDist){
+        closestDist = distance;
+        closestPos = {x,y};
       }
     }
 
+    return closestPos;
+  };
+
+  // Get all possible moves for the respective piece.
+  getPossibleMoves(
+    piece:IPiece,
+    pieces: IPiece[],
+  ){
+    
+    const playersTurn = this.turns % 2 === 0 ? 'white' : 'black';
+    
+    // Base case for if it is not the piece's respective
+    // color's turn.
+    if(piece.color !== playersTurn){
+      const curSquare = this.boardSquares.filter(({square}) => square === piece.location)[0];
+      return [curSquare];
+    }
+
+    const res: IBoardSquare[] = [];
+    const {type} = piece;
+    switch(type){
+      case 'pawn':
+        res.push(
+          ...this.pawnService.getViablePos(
+            piece, 
+            pieces, 
+          )
+        );
+        break;
+      case 'rook':
+        res.push(
+          ...this.rookService.getViablePos(
+            piece, 
+            pieces,
+          )
+        );
+        break;
+      case 'knight':
+        res.push(
+          ...this.knightService.getViablePos(
+            piece, 
+            pieces,
+          )
+        );
+        break;
+      case 'bishop':
+        res.push(
+          ...this.bishopService.getViablePos(
+            piece, 
+            pieces, 
+          )
+        );
+        break;
+      case 'queen':
+        res.push(
+          ...this.queenService.getViablePos(
+            piece, 
+            pieces, 
+          )
+        );
+        break;
+      case 'king':
+        res.push(
+          ...this.kingService.getViablePos(
+            piece, 
+            pieces, 
+          )
+        );
+        break;
+    }
+    return res;
+  }
+
+  // Filter all respective moves from possible moves that would
+  // result in the piece's respective king being in check.
+  filterMoves(
+    curPiece: IPiece,
+    moves: IBoardSquare[],
+    pieces: IPiece[],
+    boardSquares: IBoardSquare[],
+  ){
+    const res: IBoardSquare[] = [];
+    const allPiecesExcluding = pieces.filter(({name}) => name !== curPiece.name);
+    for(const move of moves){
+      const newPieces = [
+        ...allPiecesExcluding
+          // Filter simulate a piece being taken by the respective move.
+          .filter(({location}) => location !== move.square),
+        {
+          ...curPiece,
+          location:move.square,
+        }
+      ];
+      const inCheck = this.inCheck(
+        newPieces,
+        boardSquares
+      );
+      if(!inCheck || move.square === curPiece.location) res.push(move);
+    }
     return res;
   }
 
@@ -129,7 +215,6 @@ export class KingService {
             ...this.pawnService.getViablePos(
               checkedPiece,
               pieces,
-              boardSquares,
             )
           );
           break;
@@ -138,7 +223,6 @@ export class KingService {
             ...this.rookService.getViablePos(
               checkedPiece,
               pieces,
-              boardSquares
             )
           )
           break;
@@ -147,7 +231,6 @@ export class KingService {
             ...this.knightService.getViablePos(
               checkedPiece,
               pieces,
-              boardSquares
             )
           )
           break;
@@ -156,7 +239,6 @@ export class KingService {
             ...this.bishopService.getViablePos(
               checkedPiece,
               pieces,
-              boardSquares
             )
           )
           break;
@@ -165,16 +247,14 @@ export class KingService {
             ...this.queenService.getViablePos(
               checkedPiece,
               pieces,
-              boardSquares
             )
           )
           break;
         case 'king':
           moves.push(
-            ...this.getViablePos(
+            ...this.kingService.getViablePos(
               checkedPiece,
               pieces,
-              boardSquares
             )
           )
           break;
@@ -231,7 +311,6 @@ export class KingService {
             ...this.rookService.getViablePos(
               piece,
               allPieces,
-              boardSquares
             )
           );
           break;
@@ -240,7 +319,6 @@ export class KingService {
             ...this.knightService.getViablePos(
               piece,
               allPieces,
-              boardSquares
             )
           )
           break;
@@ -249,7 +327,6 @@ export class KingService {
             ...this.bishopService.getViablePos(
               piece,
               allPieces,
-              boardSquares
             )
           );
           break;
@@ -258,16 +335,14 @@ export class KingService {
             ...this.queenService.getViablePos(
               piece,
               allPieces,
-              boardSquares
             )
           );
           break;
         case 'king':
           res.push(
-            ...this.getViablePos(
+            ...this.kingService.getViablePos(
               piece,
               allPieces,
-              boardSquares
             )
           );
           break;
@@ -283,6 +358,5 @@ export class KingService {
     }
     return checkVectors;
   }
-
 
 }

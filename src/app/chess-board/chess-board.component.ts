@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable} from 'rxjs'
 import { Store } from '@ngrx/store';
 
@@ -13,15 +13,12 @@ import { IBoardSquare, IPiece } from '../state/model'
   templateUrl: './chess-board.component.html',
   styleUrls: ['./chess-board.component.css']
 })
-export class ChessBoardComponent implements OnInit {
+export class ChessBoardComponent {
 
   columns:string[] = ['a','b','c','d','e','f','g','h'];
   rows:string[] = ['8','7','6','5','4','3','2','1'];
   colors:string[] = ['white','black'];
 
-  constructor(private store: Store<AppState>) {}
+  constructor() {}
 
-  ngOnInit(): void {
-  }
-  
 }

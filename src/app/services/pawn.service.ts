@@ -1,20 +1,31 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import {Point} from '@angular/cdk/drag-drop';
-import { IBoardSquare, IPiece, Columns } from './state/model';
-import { columns } from './state/columns';
-import { stringify } from 'querystring';
-import { pieces } from './state/pieces';
-import { CheckService } from './check.service';
+import { Observable } from 'rxjs';
+
+import { AppState } from '../state/app.state';
+import { getBoardSquares } from '../state/state.selector';
+import { IBoardSquare, IPiece, Columns } from '../state/model';
+import { columns } from '../state/columns';
+
+
 
 @Injectable()
 export class PawnService {
 
-  constructor(){}
+  boardSquare$: Observable<IBoardSquare[]>;
+  boardSquares: IBoardSquare[] = [];
+
+  constructor(
+    private store: Store<AppState>,
+  ){
+    this.boardSquare$ = this.store.select(getBoardSquares);
+    this.boardSquare$.subscribe((boardSquare$) =>this.boardSquares = [...boardSquare$]);
+  }
 
   getViablePos(
     curPiece:IPiece,
     pieces:IPiece[],
-    boardSquares:IBoardSquare[],
     ):IBoardSquare[]
     {
     
@@ -24,7 +35,7 @@ export class PawnService {
     const row = Number(location.split('')[1]);
 
     res.push(
-      ...boardSquares
+      ...this.boardSquares
         .filter(({square}) =>{
           return (
             (color === 'white' && (col+String(row+1)) === square) ||
@@ -47,7 +58,7 @@ export class PawnService {
       ...this.attackDiagonal(
       curPiece,
       pieces,
-      boardSquares,
+      this.boardSquares,
       color,
       row,
       col,

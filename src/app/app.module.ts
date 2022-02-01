@@ -9,14 +9,13 @@ import { AppComponent } from './app.component';
 import { ChessBoardComponent } from './chess-board/chess-board.component';
 import { BoardSquareComponent } from './board-square/board-square.component';
 import { BoardPieceComponent } from './board-piece/board-piece.component';
-import { PawnService } from './pawn.service';
-import { RookService } from './rook.service';
-import { KnightService } from './knight.service';
-import { BishopService } from './bishop.service';
-import { QueenService } from './queen.service';
-import { KingService } from './king.service';
-import { CheckService } from './check.service';
-import { PieceService } from './piece.service';
+import { PawnService } from './services/pawn.service';
+import { RookService } from './services/rook.service';
+import { KnightService } from './services/knight.service';
+import { BishopService } from './services/bishop.service';
+import { QueenService } from './services/queen.service';
+import { KingService } from './services/king.service';
+import { PieceService } from './services/piece.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +43,6 @@ import { PieceService } from './piece.service';
     BishopService,
     QueenService,
     KingService,
-    CheckService,
     PieceService,
   ],
   bootstrap: [AppComponent]

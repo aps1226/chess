@@ -14,15 +14,13 @@ import {IBoardSquare, IPiece} from '../state/model';
   templateUrl: './board-square.component.html',
   styleUrls: ['./board-square.component.css']
 })
-export class BoardSquareComponent implements OnInit,OnChanges,AfterViewInit {
+export class BoardSquareComponent implements OnInit,AfterViewInit {
 
   @Input('column') column: string = '';
   @Input('row') row: string = '';
   @Input('color') color: string = '';
 
   piece$: Observable<IPiece[]>;
-  boardSquare$: Observable<IBoardSquare[]>;
-
   piece!:IPiece | null;
 
   constructor(
@@ -30,22 +28,23 @@ export class BoardSquareComponent implements OnInit,OnChanges,AfterViewInit {
     private ref: ElementRef,
     ) {
       this.piece$ = this.store.select(getPieces);
-      this.boardSquare$ = this.store.select(getBoardSquares);
     }
 
+  // Render piece on initialization.
   ngOnInit(): void {
-    if(this.piece$) this.renderPiece();
+    this.renderPiece();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if(this.piece$) this.renderPiece();
-  }
-
+  // Update respective board square dimensions after the view 
+  // initializes.
   ngAfterViewInit(): void {
     this.updatePosition();
   }
 
+  // Updates the client location of the respective board square 
+  // to allow for the drag and drop functionality.
   updatePosition(){
+    
     const {
       top,
       right,
@@ -54,7 +53,8 @@ export class BoardSquareComponent implements OnInit,OnChanges,AfterViewInit {
       height,
       x,
       y,
-    } = this.ref.nativeElement.getBoundingClientRect()
+    } = this.ref.nativeElement.getBoundingClientRect();
+
     const newBoardSquare:IBoardSquare = {
       square: `${this.column + this.row}`,
       top,
@@ -64,12 +64,13 @@ export class BoardSquareComponent implements OnInit,OnChanges,AfterViewInit {
       height,
       x,
       y,
-    }
-    // Update location of respective board square.
-    this.store.dispatch(PiecesActions.modifyBoardSquare({boardSquare:newBoardSquare}))
+    };
 
+    this.store.dispatch(PiecesActions.modifyBoardSquare({boardSquare:newBoardSquare}))
   }
 
+  // Renders piece if the respective board square has a piece
+  // located on it.
   renderPiece(){
     const index:string = this.column + this.row;
     this.piece$.subscribe((pieces) => {
