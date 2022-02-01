@@ -10,9 +10,10 @@ import { BishopService } from './bishop.service';
 import { QueenService } from './queen.service';
 import { KingService } from './king.service';
 import { AppState } from '../state/app.state';
+import { columns } from '../state/columns';
 import * as PiecesActions from '../state/state.actions';
-import { getTurns, getBoardSquares } from '../state/state.selector';
-import { IBoardSquare, IPiece } from '../state/model';
+import { getTurns, getBoardSquares, getCastle, getPieces } from '../state/state.selector';
+import { IBoardSquare, IPiece, Castle, CastlePieces, Selection} from '../state/model';
 
 interface Memo {
   [key: string]: true;
@@ -22,6 +23,9 @@ interface Memo {
   providedIn: 'root'
 })
 export class PieceService {
+
+  pieces$: Observable<IPiece[]>;
+  pieces: IPiece[] = [];
   
   boardSquare$: Observable<IBoardSquare[]>;
   boardSquares: IBoardSquare[] = [];
@@ -38,6 +42,9 @@ export class PieceService {
     private queenService: QueenService,
     private kingService: KingService,
   ) {
+
+    this.pieces$ = this.store.select(getPieces);
+    this.pieces$.subscribe((pieces$) =>this.pieces = [...pieces$]);
 
     this.boardSquare$ = this.store.select(getBoardSquares);
     this.boardSquare$.subscribe((boardSquare$) =>this.boardSquares = [...boardSquare$]);
@@ -357,6 +364,98 @@ export class PieceService {
       })
     }
     return checkVectors;
+  }
+
+  castle(
+    castlePieces: CastlePieces,
+  ){
+    const {king,rook} = castlePieces;
+
+    // Base case.
+    if(
+      !king || 
+      king.moved ||
+      !rook ||
+      rook.moved
+      ) return;
+    
+    const side = rook.name.split('_')[1];
+    switch(side){
+      case '1':
+        this.castleKingSide(king,rook);
+        break;
+      case '2':
+        this.castleQueenSide(king,rook);
+        break;
+    }
+  }
+
+  castleKingSide(
+    king: Selection,
+    rook: Selection
+  ){
+    const row = king.location.split('')[1];
+
+    // Check that there is an open path
+    // to the king.
+    const leftOfKing = 'c'+ row;
+    const canCastle = rook['moves'].filter(
+      ({square}) => square === leftOfKing
+    )[0];
+
+    // Base case.
+    if(!canCastle) return;
+
+    // Update king's location.
+    const kingPiece = this.pieces.filter(({name}) => name === king.name)[0];
+    const newKingPiece = {
+      ...kingPiece,
+      location:'c'+ row
+    }
+    this.store.dispatch(PiecesActions.modifyPiece({piece:newKingPiece,turns:this.turns}));
+
+    // Update rook's location.
+    const rookPiece = this.pieces.filter(({name}) => name === rook.name)[0];
+    const newRookPiece = {
+      ...rookPiece,
+      location:'d'+ row
+    }
+    this.store.dispatch(PiecesActions.modifyPiece({piece:newRookPiece,turns:this.turns}));
+    // Increment turns.
+    this.store.dispatch(PiecesActions.incrementTurn());
+  }
+
+  castleQueenSide(
+    king: Selection,
+    rook: Selection
+  ){
+    const row = king.location.split('')[1];
+
+    // Check that there is an open path
+    // to the king.
+    const rightOfKing = 'e'+ row;
+    const canCastle = rook['moves'].filter(
+      ({square}) => square === rightOfKing
+    )[0];
+
+    // Base case.
+    if(!canCastle) return;
+    // Update king's location.
+    const kingPiece = this.pieces.filter(({name}) => name === king.name)[0];
+    const newKingPiece = {
+      ...kingPiece,
+      location:'g'+ row
+    }
+    this.store.dispatch(PiecesActions.modifyPiece({piece:newKingPiece,turns:this.turns}));
+    // Update rook's location.
+    const rookPiece = this.pieces.filter(({name}) => name === rook.name)[0];
+    const newRookPiece = {
+      ...rookPiece,
+      location:'f'+ row
+    }
+    this.store.dispatch(PiecesActions.modifyPiece({piece:newRookPiece,turns:this.turns}));
+    // Increment turns.
+    this.store.dispatch(PiecesActions.incrementTurn());
   }
 
 }

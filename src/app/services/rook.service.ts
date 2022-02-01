@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { AppState } from '../state/app.state';
 import { getBoardSquares } from '../state/state.selector';
-import { IBoardSquare, IPiece, Columns} from '../state/model';
+import { IBoardSquare, IPiece, GameStatus} from '../state/model';
 import { columns } from '../state/columns'; 
 
 @Injectable({

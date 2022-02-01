@@ -1,9 +1,10 @@
-import { IPiece, IBoardSquare, Selection } from './model';
+import { IPiece, IBoardSquare, Selection, Castle, GameStatus} from './model';
 
 export interface AppState {
   readonly pieces: IPiece[];
   readonly turns: number;
   readonly boardSquares: IBoardSquare[];
-  readonly check: boolean;
+  readonly gameStatus: GameStatus;
   readonly selection: Selection;
+  readonly castle: Castle;
 }

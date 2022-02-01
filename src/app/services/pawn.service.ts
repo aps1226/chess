@@ -96,7 +96,7 @@ export class PawnService {
     }
     const res: IBoardSquare[] = []
     for(const target of targets){
-      if(pieces.filter((piece) => piece.location === target).length){
+      if(pieces.filter((piece) => piece.location === target &&  piece.color !== curPiece.color).length){
         res.push(
           ...boardSquares.filter(({square}) => square === target)
         );

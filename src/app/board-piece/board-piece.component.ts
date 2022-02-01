@@ -4,10 +4,10 @@ import { Observable } from 'rxjs'
 import {CdkDragDrop, DragRef, Point} from '@angular/cdk/drag-drop';
 
 import { PieceService } from '../services/piece.service';
-import { getPieces, getTurns, getBoardSquares, getCheck, getSelection } from '../state/state.selector';
+import { getPieces, getTurns, getBoardSquares, getGameStatus, getSelection, getCastle } from '../state/state.selector';
 import { AppState } from '../state/app.state';
 import * as PiecesActions from '../state/state.actions';
-import { IBoardSquare, IPiece, Selection } from '../state/model';
+import { IBoardSquare, IPiece, Selection, Castle, GameStatus } from '../state/model';
 
 @Component({
   selector: 'app-board-piece',
@@ -27,11 +27,14 @@ export class BoardPieceComponent implements OnInit {
   turn$: Observable<number>;
   turns: number = 0;
 
-  check$: Observable<boolean>;
-  check: boolean = false;
+  gameStatus$: Observable<GameStatus>;
+  gameStatus!: GameStatus;
 
   selection$: Observable<Selection>;
   selection!: Selection;
+
+  castlePieces$: Observable<Castle>;
+  castlePieces!: Castle
 
   constructor(
     private store: Store<AppState>,
@@ -46,11 +49,14 @@ export class BoardPieceComponent implements OnInit {
       this.turn$ = this.store.select(getTurns);
       this.turn$.subscribe((turn$) => this.turns = turn$);
 
-      this.check$ = this.store.select(getCheck);
-      this.check$.subscribe((check$) => this.check = check$);
+      this.gameStatus$ = this.store.select(getGameStatus);
+      this.gameStatus$.subscribe((gameStatus$) => this.gameStatus = gameStatus$);
 
       this.selection$ = this.store.select(getSelection);
       this.selection$.subscribe((selection$) => this.selection = selection$);
+
+      this.castlePieces$ = this.store.select(getCastle);
+      this.castlePieces$.subscribe((castlePieces$) => this.castlePieces = castlePieces$);
     }
 
   ngOnInit(): void {
@@ -91,13 +97,19 @@ export class BoardPieceComponent implements OnInit {
     return resPoint;
   }
 
-
   handleDrop(event: CdkDragDrop<string>){
     const newLocation: string = event.container.data;
+    
     // Base case if piece is not moved.
     if(this.piece.location === newLocation) return;
+    
+    this.updateState(newLocation);
+  }
+
+  updateState(newLocation:string){
     // Increment turns.
     this.store.dispatch(PiecesActions.incrementTurn());
+
     // Reposition dropped piece.
     const newPiece: IPiece = {
       ...this.piece,
@@ -107,6 +119,7 @@ export class BoardPieceComponent implements OnInit {
       }
     };
     this.store.dispatch(PiecesActions.modifyPiece({piece:newPiece,turns:this.turns}));
+    
     // Determine if a piece has been captured.
     const capturedPiece = this.pieces.filter(({location,name}) =>{
       return (
@@ -119,17 +132,38 @@ export class BoardPieceComponent implements OnInit {
       const { name } = capturedPiece;
       this.store.dispatch(PiecesActions.removePiece({pieceName:name}));
     }
+
+    // Game status state.
+    const playersTurn = this.turns % 2 === 0 ? 'white' : 'black';
+    const newGameStatus = {
+      'white':{
+        'check': false,
+        'checkMate': false,
+      },
+      'black':{
+        'check': false,
+        'checkMate': false,
+      },
+    };
     // Determine if opponent's king is now in check.
-    const check  = this.pieceService.inCheck(this.pieces, this.boardSquares);
-    console.log('check: ', check);
-    // Update Check state based on result.
-    this.store.dispatch(PiecesActions.modifyCheck({check:check}));
+    newGameStatus[playersTurn]['check']  = this.pieceService.inCheck(this.pieces, this.boardSquares);
     // Determine if opponent's king is now in check-mate.
     let checkMate = false;
-    if(check){
+    if(newGameStatus[playersTurn]['check']){
       checkMate = this.pieceService.inCheckMate(this.turns,this.pieces, this.boardSquares);
     };
-    console.log('check-mate: ', checkMate);
+    newGameStatus[playersTurn]['checkMate']  = checkMate;
+    // Update Check state based on result.
+    this.store.dispatch(PiecesActions.modifyGameStatus({gameStatus:newGameStatus}));
+  }
+
+  handleDoubleClick(){
+    // Update castle state.
+    this.store.dispatch(PiecesActions.modifyCastle({piece:this.selection}));
+    const playersTurn = this.turns % 2 === 0 ? 'white' : 'black';
+    // If not in check, castle.
+    const inCheck = this.gameStatus[playersTurn]['check'];
+    if(!inCheck ) this.pieceService.castle(this.castlePieces[playersTurn]);
   }
 
 }
