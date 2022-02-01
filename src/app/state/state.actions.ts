@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { IBoardSquare, IPiece, Selection } from './model';
+import { IBoardSquare, IPiece, Selection, GameStatus } from './model';
 
 
 export const modifyPiece = createAction(
@@ -27,14 +27,19 @@ export const modifyBoardSquare = createAction(
   props<{ boardSquare: IBoardSquare }>()
 );
 
-export const modifyCheck = createAction(
+export const modifyGameStatus = createAction(
   '[CHECK] MODIFY',
-  props<{ check: boolean }>()
+  props<{ gameStatus: GameStatus }>()
 );
 
 export const modifySelection= createAction(
   '[SELECTION] MODIFY',
   props<{ selection: Selection }>()
+);
+
+export const modifyCastle= createAction(
+  '[CASTLE] MODIFY',
+  props<{ piece: Selection }>()
 );
 
 

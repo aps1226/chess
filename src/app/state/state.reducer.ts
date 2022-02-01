@@ -1,10 +1,10 @@
-import { createReducer, on } from '@ngrx/store';
+import { createFeatureSelector, createReducer, on } from '@ngrx/store';
 
 import * as PiecesActions from './state.actions';
 import { pieces } from './pieces';
 import { ConstantPool } from '@angular/compiler';
 import { state } from '@angular/animations';
-import { IBoardSquare, IPiece, Selection } from './model';
+import { IBoardSquare, IPiece, Selection, Castle, GameStatus } from './model';
 import { boardSquares } from './boardSquares';
 
 const nextPlayersTurn = (pieces:IPiece[]) =>{
@@ -16,6 +16,7 @@ const initialPieces: IPiece[] = [...pieces];
 export const piecesReducer = createReducer(
     initialPieces,
     on(PiecesActions.modifyPiece, (state, { piece,turns }) =>{
+        console.log(piece);
         const playersTurn = turns % 2 === 0 ? 'black' : 'white';
         const newState = [ 
             ...state.filter(({name}) => name !== piece.name),
@@ -56,12 +57,21 @@ export const boardSquaresReducer = createReducer(
     })
 );
 
-const initialCheck: boolean = false;
+const initialGameStatus: GameStatus = {
+    'white': {
+        'check': false,
+        'checkMate': false,
+    },
+    'black': {
+        'check': false,
+        'checkMate': false,
+    }
+};
 
-export const checkReducer = createReducer(
-    initialCheck,
-    on(PiecesActions.modifyCheck, (state, { check }) =>{
-        return check;
+export const gameStatusReducer = createReducer(
+    initialGameStatus,
+    on(PiecesActions.modifyGameStatus, (state, { gameStatus }) =>{
+        return gameStatus
     })
 );
 
@@ -74,5 +84,42 @@ export const selectionReducer = createReducer(
     initialSelection,
     on(PiecesActions.modifySelection, (state, { selection }) =>{
         return selection;
+    })
+);
+
+const initialCastle: Castle = {
+    'white': {
+        'rook': null,
+        'king': null,
+    },
+    'black': {
+        'rook': null,
+        'king': null,
+    }
+};
+
+export const castleReducer = createReducer(
+    initialCastle,
+    on(PiecesActions.modifyCastle, (state, { piece }) =>{
+        const {color} = piece;
+        const newState = {
+            'white':{
+                ...state['white']
+            },
+            'black':{
+                ...state['black']
+            },
+        };
+        switch(color){
+            case 'white':
+                newState.white[piece.type] = piece;
+                break;
+            case 'black':
+                newState.black[piece.type] = piece;
+                break;
+            default:
+                break;
+        }
+        return newState;
     })
 );

@@ -4,7 +4,7 @@ import { StoreModule } from '@ngrx/store';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
-import { piecesReducer, turnsReducer, boardSquaresReducer, checkReducer, selectionReducer } from './state/state.reducer';
+import { piecesReducer, turnsReducer, boardSquaresReducer, selectionReducer, castleReducer, gameStatusReducer } from './state/state.reducer';
 import { AppComponent } from './app.component';
 import { ChessBoardComponent } from './chess-board/chess-board.component';
 import { BoardSquareComponent } from './board-square/board-square.component';
@@ -30,8 +30,9 @@ import { PieceService } from './services/piece.service';
       pieces:piecesReducer,
       turns:turnsReducer,
       boardSquares:boardSquaresReducer,
-      check: checkReducer,
-      selection: selectionReducer
+      gameStatus: gameStatusReducer,
+      selection: selectionReducer,
+      castle: castleReducer,
     }),
     AppRoutingModule,
     DragDropModule,
