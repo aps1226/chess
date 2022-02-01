@@ -1,21 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs'
-import {CdkDragDrop, CdkDragMove, CdkDragStart, DragRef, Point, CdkDropListGroup, CdkDragEnter} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, DragRef, Point} from '@angular/cdk/drag-drop';
 
-import { PawnService } from '../pawn.service';
-import { RookService } from '../rook.service';
-import { KnightService } from '../knight.service';
-import { BishopService } from '../bishop.service';
-import { QueenService } from '../queen.service';
-import { KingService } from '../king.service';
+import { PieceService } from '../services/piece.service';
 import { getPieces, getTurns, getBoardSquares, getCheck, getSelection } from '../state/state.selector';
 import { AppState } from '../state/app.state';
 import * as PiecesActions from '../state/state.actions';
-import { pieces } from '../state/pieces';
 import { IBoardSquare, IPiece, Selection } from '../state/model';
-import { PieceService } from '../piece.service';
-import { CheckService } from '../check.service';
 
 @Component({
   selector: 'app-board-piece',
@@ -43,8 +35,6 @@ export class BoardPieceComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private kingService: KingService,
-    private checkService: CheckService,
     private pieceService: PieceService,
     ) {
       this.piece$ = this.store.select(getPieces);
@@ -66,15 +56,14 @@ export class BoardPieceComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  handleMouseDown(event:any){
+  handleMouseDown(event:MouseEvent){
     // Get all possible moves for the respective piece.
     const posMoves: IBoardSquare[] = this.pieceService.getPossibleMoves(
       this.piece,
       this.pieces,
-      this.boardSquares
     )
     // Filter moves that would be respective king in check.
-    const moves = this.checkService.filterMoves(
+    const moves = this.pieceService.filterMoves(
       this.piece,
       posMoves,
       this.pieces,
@@ -89,7 +78,6 @@ export class BoardPieceComponent implements OnInit {
       moves:[...moves,]
     }
     this.store.dispatch(PiecesActions.modifySelection({selection:curSelection}));
-    console.log(this.selection);
   }
 
   renderPosition = (point:Point, dragRef:DragRef) => {
@@ -132,15 +120,14 @@ export class BoardPieceComponent implements OnInit {
       this.store.dispatch(PiecesActions.removePiece({pieceName:name}));
     }
     // Determine if opponent's king is now in check.
-    const check  = this.kingService.inCheck(this.pieces, this.boardSquares);
+    const check  = this.pieceService.inCheck(this.pieces, this.boardSquares);
     console.log('check: ', check);
     // Update Check state based on result.
     this.store.dispatch(PiecesActions.modifyCheck({check:check}));
-    
     // Determine if opponent's king is now in check-mate.
     let checkMate = false;
     if(check){
-      checkMate = this.kingService.inCheckMate(this.turns,this.pieces, this.boardSquares);
+      checkMate = this.pieceService.inCheckMate(this.turns,this.pieces, this.boardSquares);
     };
     console.log('check-mate: ', checkMate);
   }
