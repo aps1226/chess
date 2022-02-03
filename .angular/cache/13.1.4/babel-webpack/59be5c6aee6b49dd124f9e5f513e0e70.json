@@ -1,0 +1,1 @@
+{"ast":null,"code":"\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.columns = void 0;\nexports.columns = {\n  'a': 0,\n  'b': 1,\n  'c': 2,\n  'd': 3,\n  'e': 4,\n  'f': 5,\n  'g': 6,\n  'h': 7\n};","map":null,"metadata":{},"sourceType":"script"}
