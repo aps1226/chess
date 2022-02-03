@@ -410,7 +410,8 @@ export class PieceService {
     const kingPiece = this.pieces.filter(({name}) => name === king.name)[0];
     const newKingPiece = {
       ...kingPiece,
-      location:'c'+ row
+      location:'c'+ row,
+      moved:true
     }
     this.store.dispatch(PiecesActions.modifyPiece({piece:newKingPiece,turns:this.turns}));
 
@@ -418,7 +419,8 @@ export class PieceService {
     const rookPiece = this.pieces.filter(({name}) => name === rook.name)[0];
     const newRookPiece = {
       ...rookPiece,
-      location:'d'+ row
+      location:'d'+ row,
+      moved:true
     }
     this.store.dispatch(PiecesActions.modifyPiece({piece:newRookPiece,turns:this.turns}));
     // Increment turns.
@@ -444,14 +446,16 @@ export class PieceService {
     const kingPiece = this.pieces.filter(({name}) => name === king.name)[0];
     const newKingPiece = {
       ...kingPiece,
-      location:'g'+ row
+      location:'g'+ row,
+      moved:true
     }
     this.store.dispatch(PiecesActions.modifyPiece({piece:newKingPiece,turns:this.turns}));
     // Update rook's location.
     const rookPiece = this.pieces.filter(({name}) => name === rook.name)[0];
     const newRookPiece = {
       ...rookPiece,
-      location:'f'+ row
+      location:'f'+ row,
+      moved:true
     }
     this.store.dispatch(PiecesActions.modifyPiece({piece:newRookPiece,turns:this.turns}));
     // Increment turns.

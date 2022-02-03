@@ -16,7 +16,6 @@ const initialPieces: IPiece[] = [...pieces];
 export const piecesReducer = createReducer(
     initialPieces,
     on(PiecesActions.modifyPiece, (state, { piece,turns }) =>{
-        console.log(piece);
         const playersTurn = turns % 2 === 0 ? 'black' : 'white';
         const newState = [ 
             ...state.filter(({name}) => name !== piece.name),

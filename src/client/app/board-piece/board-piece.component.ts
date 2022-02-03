@@ -113,10 +113,8 @@ export class BoardPieceComponent implements OnInit {
     // Reposition dropped piece.
     const newPiece: IPiece = {
       ...this.piece,
-      ...{
-        location: newLocation,
-        moved: true
-      }
+      location: newLocation,
+      moved:true
     };
     this.store.dispatch(PiecesActions.modifyPiece({piece:newPiece,turns:this.turns}));
     
@@ -164,6 +162,7 @@ export class BoardPieceComponent implements OnInit {
     // If not in check, castle.
     const inCheck = this.gameStatus[playersTurn]['check'];
     if(!inCheck ) this.pieceService.castle(this.castlePieces[playersTurn]);
+    console.log(this.castlePieces);
   }
 
 }

@@ -1,11 +1,13 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
-  "compileOnSave": false,
+  "compileOnSave": true,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "skipLibCheck": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -16,18 +18,26 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
-    "module": "es2020",
+    "target": "esnext",
+    "module": "commonjs",
     "types": ["node"],
+    "typeRoots": ["node_modules/@types","src/@types"],
+    "isolatedModules": true,
+    "noEmit": false,
+    "esModuleInterop": true,
     "lib": [
-      "es2020",
-      "dom"
-    ]
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "files": ["src/@types/graphql.d.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules","**/*/spec.ts"],
 }
