@@ -16,13 +16,17 @@ import { BishopService } from './services/bishop.service';
 import { QueenService } from './services/queen.service';
 import { KingService } from './services/king.service';
 import { PieceService } from './services/piece.service';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChessBoardComponent,
     BoardSquareComponent,
-    BoardPieceComponent
+    BoardPieceComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
