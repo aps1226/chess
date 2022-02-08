@@ -24,7 +24,6 @@ const config:sql.config = {
       trustServerCertificate:true,
     }
 };
-
 const appPool = new sql.ConnectionPool(config);
 
 const apolloServer = new ApolloServer({
