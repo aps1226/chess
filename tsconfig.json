@@ -20,8 +20,10 @@
     "importHelpers": true,
     "target": "esnext",
     "module": "commonjs",
-    "types": ["node"],
-    "typeRoots": ["node_modules/@types","src/@types"],
+    "paths": {
+        "Express" : ["src/@types/express"],
+        "Graphql" : ["src/@types/graphql"]
+    },
     "isolatedModules": true,
     "noEmit": false,
     "esModuleInterop": true,
@@ -37,7 +39,5 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": ["src/@types/graphql.d.ts"],
-  "include": ["src/**/*"],
   "exclude": ["node_modules","**/*/spec.ts"],
 }
