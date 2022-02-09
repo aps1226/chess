@@ -1,3 +1,3 @@
 export interface ProcessEnv {
-    [key: string]: string | undefined
+    [key: string]: string;
 }
