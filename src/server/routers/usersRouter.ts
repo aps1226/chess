@@ -28,6 +28,7 @@ module.exports = (app:Application) =>{
     // Add new user.
     router.post('/register',
     userController.newUser(db),
+    userController.findUser(db),
     (req,res) =>{
         const result = JSON.stringify(res["locals"]["queryResult"])
         res.status(201);

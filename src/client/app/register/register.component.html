@@ -1,15 +1,29 @@
-<form class="form">
-    <h1>Register</h1>
-    <p>
-        <label for="login">Username or Email</label>
-        <input type="text" name="login" placeholder="Username or email" required>
-    </p>
-    <p>
-        <label for="password">Password</label>
-        <input type="password" name='password' placeholder="Password" required> 
-    </p>
-
-    <p>
-        <input type="submit" name="submit" value="Continue">
-    </p>              
-</form>
+<body>
+    <form class="form">
+        <h1>Register</h1>
+        <p>
+            <label for="login">Username</label>
+            <input type="text" name="login" placeholder="Username" required #userName>
+        </p>
+        <p>
+            <label for="login">Email</label>
+            <input type="text" name="login" placeholder="Email" required #email>
+        </p>
+        <p>
+            <label for="password">Password</label>
+            <input type="password" name='password' placeholder="Password" required #password> 
+        </p>
+        <p>
+            <label for="password">Password</label>
+            <input type="password" name='password' placeholder="Confirm Password" required #confirmedPassword> 
+        </p>
+        <p>
+            <input type="submit" name="submit" value="Continue" (click)="handleClick(
+                userName.value,
+                email.value,
+                password.value,
+                confirmedPassword.value
+                )">
+        </p>              
+    </form>
+</body>
