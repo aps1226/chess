@@ -1,15 +1,12 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export const hash = (password: string) => {
     return new Promise((resolve, reject) => {
         const saltRounds = Number(process.env['SALT_ROUNDS']);
-        bcrypt.genSalt(saltRounds,(err, salt) =>{
+        bcrypt.hash(password,saltRounds,(err,hash) =>{
             if(err) return reject(err);
-            bcrypt.hash(password,salt,(err,hash) =>{
-                if(err) return reject(err);
-                return resolve(hash);
-            })
-        });
+            return resolve(hash);
+        })
     });
 };
 

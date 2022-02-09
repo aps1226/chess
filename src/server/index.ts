@@ -3,6 +3,8 @@ import path from 'path';
 import sql from 'mssql';
 require('dotenv').config();
 import { ApolloServer } from 'apollo-server-express';
+import helmet from 'helmet';
+import session from 'cookie-session';
 
 import schema from './graphql/schemasMap';
 
@@ -32,11 +34,31 @@ const apolloServer = new ApolloServer({
 
 appPool.connect()
     .then((pool) =>{
+        // DB connection for queries.
         app.locals['db'] = pool;
-
+        // Serve static files.
         app.use(express.static('./src/client/dist/chess/'));
+        // Request body parsing.
         app.use(express.json());
-        
+        // Wrapper for 15 middleware function securing HTTP headers
+        // returned by app.
+        app.use(helmet());
+        // Trust first proxy.
+        // app.set('trust proxy', 1);
+        // Set cookie security options.
+        // var expiryDate = new Date(Date.now() + 60 * 60 * 1000) 
+        // app.use(session({
+        // name: 'session',
+        // keys: ['key1', 'key2'],
+        // cookie: {
+        //     secure: true,
+        //     httpOnly: true,
+        //     domain: 'example.com',
+        //     path: 'foo/bar',
+        //     expires: expiryDate
+        // }
+        // }));
+
         const usersRouter = require('./routers/usersRouter')(app);
         app.use('/api/users', usersRouter);
 
@@ -44,7 +66,6 @@ appPool.connect()
         app.use('/api/games', gamesRouter);
 
         app.get('/',(req, res) =>{
-            console.log('test');
             res.render("index.html");
         });
 
