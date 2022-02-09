@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from '@ngrx/store';
+import { HttpClientModule } from '@angular/common/http';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FormsModule }   from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { piecesReducer, turnsReducer, boardSquaresReducer, selectionReducer, castleReducer, gameStatusReducer } from './state/state.reducer';
@@ -30,6 +32,7 @@ import { RegisterComponent } from './register/register.component';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     StoreModule.forRoot({
       pieces:piecesReducer,
       turns:turnsReducer,
@@ -39,6 +42,7 @@ import { RegisterComponent } from './register/register.component';
       castle: castleReducer,
     }),
     AppRoutingModule,
+    HttpClientModule,
     DragDropModule,
   ],
   providers: [

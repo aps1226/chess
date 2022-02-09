@@ -1,3 +1,13 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(#b1b1b1, white);
+    margin: 0;
+    padding: 0;
+}
+
 .form  {
     /* Size and position */
     width: 300px;
@@ -128,4 +138,9 @@
 
 .no-placeholder .form  label {
     display: block;
+}
+
+.or-container {
+    text-align: center;
+    font-size: 16px;
 }
