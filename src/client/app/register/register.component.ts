@@ -1,7 +1,7 @@
 import { ConstantPool } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 
-import { RegisterService } from '../register.service';
+import { RegisterService } from '../services/register.service';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +29,8 @@ export class RegisterComponent implements OnInit {
     };
 
     this.registerService.postRequest(body).subscribe((data:any) => {
-      console.log(data);
+      const { token }= data;
+      localStorage.setItem('id_token', token);
     })
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs'
+import { Observable } from 'rxjs';
 import {CdkDragDrop, DragRef, Point} from '@angular/cdk/drag-drop';
 
 import { PieceService } from '../services/piece.service';

@@ -11,7 +11,7 @@ const usersController = {
         INSERT INTO users (email,password,userName)
         VALUES ('${email}','${hashedPassword}','${userName}');
         `;
-        db.query(sql,(err:any,res:any) =>{
+        await db.query(sql,(err:any,res:any) =>{
           if(err) throw(err);
           resp["locals"]["queryResult"] = res['recordset'];
           next();
@@ -20,7 +20,7 @@ const usersController = {
   },
 
   findUser: (db:any )  =>{
-      return function(req: Request, resp: Response ,next: NextFunction){
+      return async function(req: Request, resp: Response ,next: NextFunction){
         
         if(!req["body"]["userName"]){
           const result = JSON.stringify('No user name was sent.');
@@ -34,18 +34,32 @@ const usersController = {
           resp.send(result);
           return;
         };
-        
+
         const {userName, password} = req.body;
-        const sql =` SELECT * FROM users WHERE userName = '${userName}');`;
-        db.query(sql,(err:any,res:any) =>{
+        const sql =`
+        SELECT * FROM users
+        WHERE 
+          userName = '${userName}' OR email = '${userName}';`;
+        await db.query(sql, async (err:any,res:any) =>{
           if(err) throw(err);
+
           if (!res['recordset'][0]){
             const result = JSON.stringify('User name not found.');
             resp.status(400);
             resp.send(result);
             return;
           }
-          else resp["locals"]["queryResult"] = res['recordset'][0];
+
+          const {password:hashedPassword} = res['recordset'][0];
+          const correctPassword = await compare(password,hashedPassword);
+          if(!correctPassword){
+            const result = JSON.stringify('Password is incorrect.');
+            resp.status(400);
+            resp.send(result);
+            return;
+          }
+          
+          resp["locals"]["queryResult"] = res['recordset'][0];
           next()
         });
 
