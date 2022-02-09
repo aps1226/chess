@@ -1,5 +1,5 @@
 import express, { Application, RequestHandler } from 'express';
-import gamesController from '../SQL/gamesController';
+import gamesController from '../controllers/gamesController';
 
 module.exports = (app:Application) =>{
 

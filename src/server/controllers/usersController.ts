@@ -1,13 +1,15 @@
 import express, {Request, Response, NextFunction} from 'express';
+import { hash, compare } from '../authentication/bcrypt';
 
 const usersController = {
   newUser: (db:any )  =>{
-      return function(req : Request, resp: Response ,next: NextFunction){
+      return async function(req : Request, resp: Response ,next: NextFunction){
         const {email,password,userName} = req.body;
+        const hashedPassword = await hash(password);
         const sql =
         `
         INSERT INTO users (email,password,userName)
-        VALUES ('${email}','${password}','${userName}');
+        VALUES ('${email}','${hashedPassword}','${userName}');
         `;
         db.query(sql,(err:any,res:any) =>{
           if(err) throw(err);
@@ -26,12 +28,17 @@ const usersController = {
           resp.send(result);
           return;
         };
-
-        const {userName} = req.body;
-        const sql =` SELECT * FROM users WHERE userName = '${userName}';`;
+        if(!req["body"]["password"]){
+          const result = JSON.stringify('No password was sent.');
+          resp.status(400);
+          resp.send(result);
+          return;
+        };
+        
+        const {userName, password} = req.body;
+        const sql =` SELECT * FROM users WHERE userName = '${userName}');`;
         db.query(sql,(err:any,res:any) =>{
           if(err) throw(err);
-          console.log(res);
           if (!res['recordset'][0]){
             const result = JSON.stringify('User name not found.');
             resp.status(400);
@@ -47,7 +54,7 @@ const usersController = {
 
   updateUser: (db:any )  =>{
     
-      return function(req: Request, resp: Response ,next: NextFunction){
+      return async function(req: Request, resp: Response ,next: NextFunction){
    
         if(!req["body"]["field"]){
           const result = JSON.stringify('Update field not specified.');
@@ -62,7 +69,8 @@ const usersController = {
           return;
         };
         const {userID} = resp["locals"]["queryResult"];
-        const {field,value} = req["body"];
+        let {field,value} = req["body"];
+        if(field === 'password') value = await hash(value);
         const sql =
         `
         UPDATE users

@@ -1,5 +1,5 @@
 import express, { Application, RequestHandler } from 'express';
-import userController from '../SQL/usersController';
+import userController from '../controllers/usersController';
 
 module.exports = (app:Application) =>{
 
@@ -16,7 +16,7 @@ module.exports = (app:Application) =>{
         res.send(result);
     });
 
-    // Find user based on userName.
+    // Find user based on userName, or email, and password.
     router.get('/find',
     userController.findUser(db),
     (req,res) =>{
