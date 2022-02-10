@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { LoginService } from '../services/login.service';
+import { LoginService } from '.././services/login.service';
+
+const jwt = new JwtHelperService();
 
 @Component({
   selector: 'app-login',
@@ -9,6 +12,8 @@ import { LoginService } from '../services/login.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  private decodedToken:any;
 
   constructor(
     private router: Router,
@@ -27,10 +32,17 @@ export class LoginComponent implements OnInit {
       password: password
     };
     this.loginService.postRequest(data).subscribe((data:any) =>{
-      const { token }= data;
-      localStorage.setItem('id_token', token);
+      this.saveToken(data);
+      this.router.navigateByUrl('/home');
     })
   };
+
+  saveToken(data:any){
+    const { token }= data;
+    this.decodedToken = jwt.decodeToken(token);
+    localStorage.setItem('auth_tkn', token);
+    localStorage.setItem('auth_meta', JSON.stringify(this.decodedToken));
+  }
 
   goToRegister(){
     this.router.navigateByUrl('/register');
