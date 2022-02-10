@@ -2,11 +2,11 @@ import express, {Request, Response, NextFunction} from 'express';
 import jwt from 'jsonwebtoken';
 
 export const createToken = (req: Request, res: Response) =>{
-    const user = res["locals"]["queryResult"];
+    const {userName} = res["locals"]["queryResult"];
     const accessToken = jwt.sign(
-        user, 
+        { userName:userName }, 
         String(process.env['ACCESS_TOKEN_SECRET']),
-        { expiresIn: '3600s'}
+        { expiresIn: '3600s' }
     );
     res.status(201).json({token: accessToken});
 };

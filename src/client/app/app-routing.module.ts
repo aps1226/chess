@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '@auth0/auth0-angular';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './auth.guard';
 import { ChessBoardComponent } from './chess-board/chess-board.component';
 
 const routes: Routes = [
@@ -18,8 +19,15 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   { 
+    path: 'home', 
+    component: HomeComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+  },
+  { 
     path: 'game', 
     component: ChessBoardComponent,
+    pathMatch: 'full',
     canActivate: [AuthGuard],
   },
 ];

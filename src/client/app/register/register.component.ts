@@ -1,7 +1,11 @@
 import { ConstantPool } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { RegisterService } from '../services/register.service';
+import { RegisterService } from '.././services/register.service';
+
+const jwt = new JwtHelperService();
 
 @Component({
   selector: 'app-register',
@@ -10,7 +14,12 @@ import { RegisterService } from '../services/register.service';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private registerService: RegisterService) { }
+  private decodedToken:any;
+
+  constructor(
+    private router: Router,
+    private registerService: RegisterService,
+    ) { }
 
   ngOnInit(): void {
   }
@@ -29,9 +38,16 @@ export class RegisterComponent implements OnInit {
     };
 
     this.registerService.postRequest(body).subscribe((data:any) => {
-      const { token }= data;
-      localStorage.setItem('id_token', token);
+      this.saveToken(data);
+      this.router.navigateByUrl('/home');
     })
+  }
+
+  saveToken(data:any){
+    const { token }= data;
+    this.decodedToken = jwt.decodeToken(token);
+    localStorage.setItem('auth_tkn', token);
+    localStorage.setItem('auth_meta', JSON.stringify(this.decodedToken));
   }
 
 }
