@@ -2,9 +2,12 @@ import express, {Request, Response, NextFunction} from 'express';
 import jwt from 'jsonwebtoken';
 
 export const createToken = (req: Request, res: Response) =>{
-    const {userName} = res["locals"]["queryResult"];
+    const { userID, userName} = res["locals"]["queryResult"];
     const accessToken = jwt.sign(
-        { userName:userName }, 
+        { 
+            userID: userID,
+            userName:userName 
+        }, 
         String(process.env['ACCESS_TOKEN_SECRET']),
         { expiresIn: '3600s' }
     );
@@ -20,4 +23,4 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         req.user = user;
         return next();
     });
-}
+};

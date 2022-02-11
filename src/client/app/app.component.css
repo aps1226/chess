@@ -17,7 +17,8 @@
   }
 
   p {
-    margin: 0;
+    margin: auto;
+    font-size: x-large;
   }
 
   .root {

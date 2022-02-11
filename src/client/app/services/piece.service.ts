@@ -12,8 +12,10 @@ import { KingService } from './king.service';
 import { AppState } from '../state/app.state';
 import { columns } from '../state/columns';
 import * as PiecesActions from '../state/state.actions';
-import { getTurns, getBoardSquares, getCastle, getPieces } from '../state/state.selector';
+import { getTurns, getBoardSquares, getCastle, getPieces, getState } from '../state/state.selector';
 import { IBoardSquare, IPiece, Castle, CastlePieces, Selection} from '../state/model';
+import { AuthService } from './authentication.service';
+import { SocketioService } from './socketio.service';
 
 interface Memo {
   [key: string]: true;
@@ -33,6 +35,8 @@ export class PieceService {
   turn$: Observable<number>;
   turns: number = 0;
 
+  userID!: string;
+
   constructor(
     private store: Store<AppState>,
     private pawnService: PawnService,
@@ -41,6 +45,8 @@ export class PieceService {
     private bishopService: BishopService,
     private queenService: QueenService,
     private kingService: KingService,
+    private authService: AuthService,
+    private socketService: SocketioService,
   ) {
 
     this.pieces$ = this.store.select(getPieces);
@@ -51,6 +57,8 @@ export class PieceService {
 
     this.turn$ = this.store.select(getTurns);
     this.turn$.subscribe((turn$) => this.turns = turn$);
+
+    this.userID = this.authService.getUserID();
   }
 
   // Render position based on which possible move the piece
@@ -91,11 +99,11 @@ export class PieceService {
     pieces: IPiece[],
   ){
     
-    const playersTurn = this.turns % 2 === 0 ? 'white' : 'black';
     
-    // Base case for if it is not the piece's respective
-    // color's turn.
-    if(piece.color !== playersTurn){
+    // Base case for if it is not the piece's respective color's turn
+    // or if the piece does not belong to the respective player.
+    const playersTurn = this.turns % 2 === 0 ? 'white' : 'black';
+    if(piece.color !== playersTurn || piece.userID !== this.userID){
       const curSquare = this.boardSquares.filter(({square}) => square === piece.location)[0];
       return [curSquare];
     }
@@ -424,7 +432,13 @@ export class PieceService {
     }
     this.store.dispatch(PiecesActions.modifyPiece({piece:newRookPiece,turns:this.turns}));
     // Increment turns.
-    this.store.dispatch(PiecesActions.incrementTurn());
+    const newTurns = this.turns + 1;
+    this.store.dispatch(PiecesActions.incrementTurn({turns:newTurns}));
+
+    // Send new state data to socket connection.
+    let newState!:AppState;
+    this.store.select(getState).subscribe(state => newState = state);
+    this.socketService.sendData(newState);
   }
 
   castleQueenSide(
@@ -459,7 +473,13 @@ export class PieceService {
     }
     this.store.dispatch(PiecesActions.modifyPiece({piece:newRookPiece,turns:this.turns}));
     // Increment turns.
-    this.store.dispatch(PiecesActions.incrementTurn());
+    const newTurns = this.turns + 1;
+    this.store.dispatch(PiecesActions.incrementTurn({turns:newTurns}));
+
+    // Send new state data to socket connection.
+    let newState!:AppState;
+    this.store.select(getState).subscribe(state => newState = state);
+    this.socketService.sendData(newState);
   }
 
 }

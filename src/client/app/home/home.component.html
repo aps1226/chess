@@ -1,8 +1,13 @@
 <body>
-    <form class="form">
-        <h1>Home</h1>
-        <p>
-            <input (click)="playNewGame()" type="submit" name="submit" value="New Game">
-        </p>     
-    </form>
+    <div *ngIf="!matching">
+        <form class="form">
+            <h1>Home</h1>
+            <p>
+                <input (click)="playNewGame()" type="submit" name="submit" value="New Game">
+            </p>     
+        </form>
+    </div>
+    <div *ngIf="matching" class="loading-icon-container">
+        <img class='rotate' src="assets/WhitePawn.png"/>
+    </div>
 </body>

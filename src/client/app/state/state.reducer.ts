@@ -7,9 +7,12 @@ import { state } from '@angular/animations';
 import { IBoardSquare, IPiece, Selection, Castle, GameStatus } from './model';
 import { boardSquares } from './boardSquares';
 
-const nextPlayersTurn = (pieces:IPiece[]) =>{
-    pieces.forEach
-}
+export const stateReducer = createReducer(
+    {},
+    on(PiecesActions.modifyState,(state) =>{
+        return state;
+    })
+);
 
 const initialPieces: IPiece[] = [...pieces];
 
@@ -41,7 +44,9 @@ const initialTurns: number = 0;
 
 export const turnsReducer = createReducer(
     initialTurns,
-    on(PiecesActions.incrementTurn, (state, ) => state+1)
+    on(PiecesActions.incrementTurn, (state, { turns }) =>{
+        return turns;
+    })
 );
 
 const initialBoardSquares: IBoardSquare[] = [...boardSquares];
@@ -122,3 +127,10 @@ export const castleReducer = createReducer(
         return newState;
     })
 );
+
+export const gameIDReducer = createReducer(
+    0,
+    on(PiecesActions.modifyGameID, (state,{ gameID }) =>{
+        return gameID;
+    })
+)
