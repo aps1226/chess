@@ -7,4 +7,5 @@ export interface AppState {
   readonly gameStatus: GameStatus;
   readonly selection: Selection;
   readonly castle: Castle;
+  readonly gameID: number;
 }

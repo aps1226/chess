@@ -9,6 +9,8 @@ export const selectBoardSquares = (state: AppState) => state.boardSquares;
 export const selectGameStatus = (state: AppState) => state.gameStatus;
 export const selectSelection = (state: AppState) => state.selection;
 export const selectCastle = (state: AppState) => state.castle;
+export const selectGameID = (state: AppState) => state.gameID;
+export const selectState = (state: AppState) => state;
 
 export const getPieces = createSelector(
     selectPieces,
@@ -38,4 +40,14 @@ export const getSelection = createSelector(
 export const getCastle = createSelector(
     selectCastle,
     (castle: Castle) => castle
+);
+
+export const getGameID = createSelector(
+    selectGameID,
+    (gameID: number) => gameID
+);
+
+export const getState = createSelector(
+    selectState,
+    (state: AppState) => state
 );

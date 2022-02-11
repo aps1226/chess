@@ -6,7 +6,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule }   from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
-import { piecesReducer, turnsReducer, boardSquaresReducer, selectionReducer, castleReducer, gameStatusReducer } from './state/state.reducer';
+import { piecesReducer, turnsReducer, boardSquaresReducer, selectionReducer, castleReducer, gameStatusReducer, gameIDReducer } from './state/state.reducer';
 import { AppComponent } from './app.component';
 import { ChessBoardComponent } from './chess-board/chess-board.component';
 import { BoardSquareComponent } from './board-square/board-square.component';
@@ -18,6 +18,7 @@ import { BishopService } from './services/bishop.service';
 import { QueenService } from './services/queen.service';
 import { KingService } from './services/king.service';
 import { PieceService } from './services/piece.service';
+import { SocketioService } from './services/socketio.service';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
@@ -42,6 +43,7 @@ import { HomeComponent } from './home/home.component';
       gameStatus: gameStatusReducer,
       selection: selectionReducer,
       castle: castleReducer,
+      gameID: gameIDReducer
     }),
     AppRoutingModule,
     HttpClientModule,
@@ -55,6 +57,7 @@ import { HomeComponent } from './home/home.component';
     QueenService,
     KingService,
     PieceService,
+    SocketioService
   ],
   bootstrap: [AppComponent]
 })

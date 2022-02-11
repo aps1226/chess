@@ -5,6 +5,7 @@ export interface IPiece {
     moved:boolean;
     color:string;
     type:string;
+    userID: string;
 }
 
 export interface IBoardSquare {

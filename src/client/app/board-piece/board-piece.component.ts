@@ -4,10 +4,12 @@ import { Observable } from 'rxjs';
 import {CdkDragDrop, DragRef, Point} from '@angular/cdk/drag-drop';
 
 import { PieceService } from '../services/piece.service';
-import { getPieces, getTurns, getBoardSquares, getGameStatus, getSelection, getCastle } from '../state/state.selector';
+import { getPieces, getTurns, getBoardSquares, getGameStatus, getSelection, getCastle, getState } from '../state/state.selector';
 import { AppState } from '../state/app.state';
-import * as PiecesActions from '../state/state.actions';
+import * as StateActions from '../state/state.actions';
 import { IBoardSquare, IPiece, Selection, Castle, GameStatus } from '../state/model';
+import { SocketioService} from '.././services/socketio.service';
+import { AuthService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-board-piece',
@@ -36,9 +38,13 @@ export class BoardPieceComponent implements OnInit {
   castlePieces$: Observable<Castle>;
   castlePieces!: Castle
 
+  userID!: string;
+
   constructor(
     private store: Store<AppState>,
     private pieceService: PieceService,
+    private socketService: SocketioService,
+    private authService: AuthService
     ) {
       this.piece$ = this.store.select(getPieces);
       this.piece$.subscribe((piece$) =>this.pieces = [...piece$]);
@@ -57,12 +63,16 @@ export class BoardPieceComponent implements OnInit {
 
       this.castlePieces$ = this.store.select(getCastle);
       this.castlePieces$.subscribe((castlePieces$) => this.castlePieces = castlePieces$);
+
+      this.userID = this.authService.getUserID();
     }
 
   ngOnInit(): void {
   }
 
   handleMouseDown(event:MouseEvent){
+
+    console.log(this.turns)
     // Get all possible moves for the respective piece.
     const posMoves: IBoardSquare[] = this.pieceService.getPossibleMoves(
       this.piece,
@@ -83,7 +93,7 @@ export class BoardPieceComponent implements OnInit {
       ...this.piece,
       moves:[...moves,]
     }
-    this.store.dispatch(PiecesActions.modifySelection({selection:curSelection}));
+    this.store.dispatch(StateActions.modifySelection({selection:curSelection}));
   }
 
   renderPosition = (point:Point, dragRef:DragRef) => {
@@ -102,13 +112,14 @@ export class BoardPieceComponent implements OnInit {
     
     // Base case if piece is not moved.
     if(this.piece.location === newLocation) return;
-    
+  
     this.updateState(newLocation);
   }
 
   updateState(newLocation:string){
     // Increment turns.
-    this.store.dispatch(PiecesActions.incrementTurn());
+    const newTurns = this.turns + 1;
+    this.store.dispatch(StateActions.incrementTurn({turns:newTurns}));
 
     // Reposition dropped piece.
     const newPiece: IPiece = {
@@ -116,7 +127,7 @@ export class BoardPieceComponent implements OnInit {
       location: newLocation,
       moved:true
     };
-    this.store.dispatch(PiecesActions.modifyPiece({piece:newPiece,turns:this.turns}));
+    this.store.dispatch(StateActions.modifyPiece({piece:newPiece,turns:this.turns}));
     
     // Determine if a piece has been captured.
     const capturedPiece = this.pieces.filter(({location,name}) =>{
@@ -128,7 +139,7 @@ export class BoardPieceComponent implements OnInit {
     // If a piece has been captured, remove from state.
     if(capturedPiece){
       const { name } = capturedPiece;
-      this.store.dispatch(PiecesActions.removePiece({pieceName:name}));
+      this.store.dispatch(StateActions.removePiece({pieceName:name}));
     }
 
     // Game status state.
@@ -152,17 +163,21 @@ export class BoardPieceComponent implements OnInit {
     };
     newGameStatus[playersTurn]['checkMate']  = checkMate;
     // Update Check state based on result.
-    this.store.dispatch(PiecesActions.modifyGameStatus({gameStatus:newGameStatus}));
+    this.store.dispatch(StateActions.modifyGameStatus({gameStatus:newGameStatus}));
+    
+    // Send new state data to socket connection.
+    let newState!:AppState;
+    this.store.select(getState).subscribe(state => newState = state);
+    this.socketService.sendData(newState);
   }
 
   handleDoubleClick(){
     // Update castle state.
-    this.store.dispatch(PiecesActions.modifyCastle({piece:this.selection}));
+    this.store.dispatch(StateActions.modifyCastle({piece:this.selection}));
     const playersTurn = this.turns % 2 === 0 ? 'white' : 'black';
     // If not in check, castle.
     const inCheck = this.gameStatus[playersTurn]['check'];
     if(!inCheck ) this.pieceService.castle(this.castlePieces[playersTurn]);
-    console.log(this.castlePieces);
   }
 
 }

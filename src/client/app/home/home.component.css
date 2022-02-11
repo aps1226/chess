@@ -1,4 +1,5 @@
 body {
+    position: relative;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -143,4 +144,28 @@ body {
 .or-container {
     text-align: center;
     font-size: 16px;
+}
+
+.loading-icon-container {
+    position: absolute;
+    top: 200px;
+    width: 100%;
+}
+
+.rotate {
+    width: 125px; 
+    height: auto; 
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    animation: rotation 0.75s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
 }

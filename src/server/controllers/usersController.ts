@@ -19,7 +19,7 @@ const usersController = {
       }
   },
 
-  findUser: (db:any )  =>{
+  findUser: (db:any)  =>{
       return async function(req: Request, resp: Response ,next: NextFunction){
         
         if(!req["body"]["userName"]){

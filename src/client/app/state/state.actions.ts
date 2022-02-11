@@ -1,7 +1,13 @@
 import { createAction, props } from '@ngrx/store';
 
+import { AppState } from './app.state';
 import { IBoardSquare, IPiece, Selection, GameStatus } from './model';
 
+
+export const modifyState = createAction(
+  '[STATE] MODIFY',
+  props<{ state: AppState }>()
+);
 
 export const modifyPiece = createAction(
   '[PIECE] MODIFY',
@@ -20,6 +26,7 @@ export const removePiece = createAction(
 
 export const incrementTurn = createAction(
   '[TURN] INCREMENT',
+  props<{ turns: number }>()
 );
 
 export const modifyBoardSquare = createAction(
@@ -40,6 +47,11 @@ export const modifySelection= createAction(
 export const modifyCastle= createAction(
   '[CASTLE] MODIFY',
   props<{ piece: Selection }>()
+);
+
+export const modifyGameID= createAction(
+  '[GAMEID] MODIFY',
+  props<{ gameID: number }>()
 );
 
 
