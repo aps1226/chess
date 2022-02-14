@@ -1,7 +1,7 @@
-body {
+.home-container {
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100vh;
     width: 100vw;
     background: linear-gradient(#b1b1b1, white);
@@ -9,11 +9,16 @@ body {
     padding: 0;
 }
 
+.form-container {
+  position:absolute;
+  top:25%;
+  left:50%;
+  margin: -150px;
+}
+
 .form  {
     /* Size and position */
     width: 300px;
-    margin: 60px auto 30px;
-    padding: 10px;
     position: relative;
 
     /* Font styles */
@@ -141,15 +146,11 @@ body {
     display: block;
 }
 
-.or-container {
-    text-align: center;
-    font-size: 16px;
-}
-
 .loading-icon-container {
     position: absolute;
-    top: 200px;
-    width: 100%;
+    top:25%;
+    left:50%;
+    margin: -62.5px;
 }
 
 .rotate {

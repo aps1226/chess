@@ -24,11 +24,17 @@
   .root {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
   }
 
   .spacer {
     flex: 1;
+  }
+
+  .toolbar-container {
+    width:100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .toolbar {
@@ -42,24 +48,6 @@
     font-weight: 600;
   }
 
-  .toolbar img {
-    margin: 0 16px;
-  }
-
-  .toolbar #twitter-logo {
-    height: 40px;
-    margin: 0 8px;
-  }
-
-  .toolbar #youtube-logo {
-    height: 40px;
-    margin: 0 16px;
-  }
-
-  .toolbar #twitter-logo:hover,
-  .toolbar #youtube-logo:hover {
-    opacity: 0.8;
-  }
 
   .content {
     display: flex;

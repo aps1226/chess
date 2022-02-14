@@ -1,8 +1,7 @@
-
-<!-- Toolbar -->
 <div class='root'>
-  <div class='toolbar' *ngIf="userName">
-    <p>{{userName}}</p>
+  <div class='toolbar-container' *ngIf="userName">
+    <div class='toolbar'></div>
+    <app-sidebar [userName]="userName"></app-sidebar>
   </div>
   <router-outlet></router-outlet>
 </div>
