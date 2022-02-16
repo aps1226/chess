@@ -2,8 +2,8 @@
     cdkDrag
     [cdkDragData]="piece"
     [cdkDragConstrainPosition]= "renderPosition"
-    (cdkDragDropped)="handleDrop($event)"
     (mousedown)="handleMouseDown($event)"
+    (cdkDragDropped)="handleDrop($event)"
     (dblclick)="handleDoubleClick()"
 >
     <img class='piece' src={{piece.src}}>

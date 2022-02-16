@@ -55,6 +55,8 @@ export class BoardSquareComponent implements OnInit,AfterViewInit {
       y,
     } = this.ref.nativeElement.getBoundingClientRect();
 
+    console.log(top)
+
     const newBoardSquare:IBoardSquare = {
       square: `${this.column + this.row}`,
       top,

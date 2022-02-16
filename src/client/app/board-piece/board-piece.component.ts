@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {CdkDragDrop, DragRef, Point} from '@angular/cdk/drag-drop';
@@ -16,7 +16,7 @@ import { AuthService } from '../services/authentication.service';
   templateUrl: './board-piece.component.html',
   styleUrls: ['./board-piece.component.css']
 })
-export class BoardPieceComponent implements OnInit {
+export class BoardPieceComponent {
 
   @Input('piece') piece!:IPiece;
 
@@ -42,6 +42,7 @@ export class BoardPieceComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
+    private elementRef: ElementRef,
     private pieceService: PieceService,
     private socketService: SocketioService,
     private authService: AuthService
@@ -66,9 +67,6 @@ export class BoardPieceComponent implements OnInit {
 
       this.userID = this.authService.getUserID();
     }
-
-  ngOnInit(): void {
-  }
 
   handleMouseDown(event:MouseEvent){
     // Get all possible moves for the respective piece.
@@ -98,6 +96,7 @@ export class BoardPieceComponent implements OnInit {
   renderPosition = (point:Point, dragRef:DragRef) => {
     // Render piece in appropriate position based on which move
     // the piece is dragged, or dropped, closest to.
+    console.log(point)
     let resPoint:Point = this.pieceService.renderPosition(
       point,
       this.piece,
@@ -114,7 +113,6 @@ export class BoardPieceComponent implements OnInit {
   }
 
   updateState(newLocation:string){
-    console.log(newLocation)
     // Increment turns.
     const newTurns = this.turns + 1;
     this.store.dispatch(StateActions.incrementTurn({turns:newTurns}));

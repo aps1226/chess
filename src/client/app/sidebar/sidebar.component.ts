@@ -49,11 +49,11 @@ export class SidebarComponent {
     this.show = !this.show;
   }
 
-  // @HostListener('document:mousedown', ['$event'])
-  // onGlobalClick(event: MouseEvent): void {
-  //    if (!this.elementRef.nativeElement.contains(event.target)) {
-  //     this.show = false;
-  //    }
-  // }
+  @HostListener('document:mousedown', ['$event'])
+  onGlobalClick(event: MouseEvent): void {
+     if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.show = false;
+     }
+  }
   
 }

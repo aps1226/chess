@@ -10,11 +10,11 @@ export interface IPiece {
 
 export interface IBoardSquare {
     square: string;
-    top: string;
-    right: string;
-    bottom: string;
-    left: string;
-    height:string;
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+    height:number;
     x:number;
     y:number;
 }
