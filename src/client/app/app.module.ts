@@ -4,8 +4,14 @@ import { StoreModule } from '@ngrx/store';
 import { HttpClientModule } from '@angular/common/http';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule }   from '@angular/forms';
-
 import { AppRoutingModule } from './app-routing.module';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatDividerModule} from '@angular/material/divider';
+
 import { piecesReducer, turnsReducer, boardSquaresReducer, selectionReducer, castleReducer, gameStatusReducer, gameIDReducer } from './state/state.reducer';
 import { AppComponent } from './app.component';
 import { ChessBoardComponent } from './chess-board/chess-board.component';
@@ -22,6 +28,7 @@ import { SocketioService } from './services/socketio.service';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +38,8 @@ import { HomeComponent } from './home/home.component';
     BoardPieceComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +56,12 @@ import { HomeComponent } from './home/home.component';
     AppRoutingModule,
     HttpClientModule,
     DragDropModule,
+    // BrowserAnimationsModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule
   ],
   providers: [
     PawnService,
