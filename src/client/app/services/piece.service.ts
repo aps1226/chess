@@ -89,7 +89,6 @@ export class PieceService {
         closestPos = {x,y};
       }
     }
-
     return closestPos;
   };
 

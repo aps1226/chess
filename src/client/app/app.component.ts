@@ -1,7 +1,9 @@
-import { Component, Input, HostListener, OnDestroy} from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, HostListener} from '@angular/core';
 import { Router } from '@angular/router';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 import { AuthService } from './services/authentication.service';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +13,13 @@ import { AuthService } from './services/authentication.service';
 export class AppComponent implements OnDestroy {
 
   title = 'chess';
-  userName!:string
 
+  userName!:string;
+  
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private observer: BreakpointObserver
   ){
     this.router.events.subscribe((val) =>{
       this.userName = this.authService.getUserName();

@@ -71,8 +71,6 @@ export class BoardPieceComponent implements OnInit {
   }
 
   handleMouseDown(event:MouseEvent){
-
-    console.log(this.turns)
     // Get all possible moves for the respective piece.
     const posMoves: IBoardSquare[] = this.pieceService.getPossibleMoves(
       this.piece,
@@ -93,6 +91,7 @@ export class BoardPieceComponent implements OnInit {
       ...this.piece,
       moves:[...moves,]
     }
+    console.log(moves)
     this.store.dispatch(StateActions.modifySelection({selection:curSelection}));
   }
 
@@ -109,14 +108,13 @@ export class BoardPieceComponent implements OnInit {
 
   handleDrop(event: CdkDragDrop<string>){
     const newLocation: string = event.container.data;
-    
     // Base case if piece is not moved.
     if(this.piece.location === newLocation) return;
-  
     this.updateState(newLocation);
   }
 
   updateState(newLocation:string){
+    console.log(newLocation)
     // Increment turns.
     const newTurns = this.turns + 1;
     this.store.dispatch(StateActions.incrementTurn({turns:newTurns}));

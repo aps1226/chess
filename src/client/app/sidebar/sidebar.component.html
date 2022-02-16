@@ -1,8 +1,20 @@
-<mat-sidenav-container class="mat-elevation-z8">
+<div class="menu-toggle-container">
+    <mat-icon 
+    class="menu-toggle"
+    (click)="menuToggle($event)"
+    >
+        {{show ? 'close' : 'menu'}}
+    </mat-icon>
+</div>
+<mat-sidenav-container class="mat-elevation-z8" [@openClose] = "show ? 'open' : 'closed'">
     <div class="username-container">
         <span class="username">{{userName}}</span>
     </div>
-    <button mat-button class="menu-button">
+    <button 
+        mat-button 
+        class="menu-button"
+        (click)="handleClick('home')"
+    >
         <mat-icon>home</mat-icon>
         <span>Home</span>
     </button>
