@@ -13,7 +13,7 @@ import gamesController from './controllers/gamesController';
 const app = express();
 const server = http.createServer(app);
 
-const PORT = 8080;
+const PORT = process.env['PORT'] || 8080;
 
 const config:sql.config = {
     user: process.env['DB_USERNAME'],
