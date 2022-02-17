@@ -1,14 +1,14 @@
 {
     "presets": [
-        "@babel/preset-env",
+
         "@babel/preset-typescript",
         [
-            "env",
+            "@babel/preset-env",
             {
                 "targets":{
                     "browsers":["last 2 versions", "safari >= 7"]
                 },
-                "modules": false
+                "modules": "commonjs"
             }
         ]
     ],
@@ -16,9 +16,18 @@
         [
             "@babel/plugin-transform-runtime",
             {
-                "regenerator":true
+                "coreJS":3
             }
-        ]
-    ]
+        ],
+        "babel-plugin-import-graphql",
+        "babel-plugin-graphql-tag",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-proposal-optional-chaining"
+    ],
+    "ignore": [
+        "node_modules",
+        "dist"
+      ]
 }
     

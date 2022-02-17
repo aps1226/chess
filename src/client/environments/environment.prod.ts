@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  SOCKET_ENDPOINT: 'https://chessproject.azurewebsites.net/'
+  SOCKET_ENDPOINT: 'https://chessproject.azurewebsites.net'
 };

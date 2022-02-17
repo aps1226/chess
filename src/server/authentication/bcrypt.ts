@@ -1,8 +1,9 @@
 import bcrypt from 'bcryptjs';
 
+const saltRounds = Number(process.env['NODE_ENV'] === 'production' ? process.env['PROD_SALT_ROUNDS'] : process.env['DEV_SALT_ROUNDS']);
+
 export const hash = (password: string) => {
     return new Promise((resolve, reject) => {
-        const saltRounds = Number(process.env['SALT_ROUNDS']);
         bcrypt.hash(password,saltRounds,(err,hash) =>{
             if(err) return reject(err);
             return resolve(hash);

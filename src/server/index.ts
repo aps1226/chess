@@ -16,10 +16,10 @@ const server = http.createServer(app);
 const PORT = process.env['PORT'] || 8080;
 
 const config:sql.config = {
-    user: process.env['DB_USERNAME'],
-    password: process.env['DB_PASSWORD'],
-    server: process.env['DB_SERVER'], 
-    database: process.env['DB_NAME'], 
+    user: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_USERNAME'] : process.env['DEV_DB_USERNAME']),
+    password: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_PASSWORD'] : process.env['DEV_DB_PASSWORD']),
+    server: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_SERVER'] : process.env['DEV_DB_SERVER']), 
+    database: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_NAME'] : process.env['DEV_DB_NAME']), 
     pool:{
       max: 20,
       min: 10,
