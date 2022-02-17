@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "main": "./src/server/index.ts",
   "scripts": {
-    "start": "ts-node src/server/index.ts",
+    "start": "ts-node --transpile-only src/server/index.ts",
     "dev:client": "ng serve --hmr",
     "dev": "cross-env NODE_ENV=development concurrently \"nodemon src/server/index.ts\" \"npm run watch\" ",
     "build": "ng build",
