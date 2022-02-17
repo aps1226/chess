@@ -15,6 +15,8 @@ const server = http.createServer(app);
 
 const PORT = process.env['PORT'] || 8080;
 
+const staticFilesPath: string = process.env['NODE_ENV'] === 'production' ? './src/public' : './dist/src/public';
+
 const config:sql.config = {
     user: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_USERNAME'] : process.env['DEV_DB_USERNAME']),
     password: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_PASSWORD'] : process.env['DEV_DB_PASSWORD']),
@@ -30,6 +32,7 @@ const config:sql.config = {
       trustServerCertificate:true,
     }
 };
+
 const appPool = new sql.ConnectionPool(config);
 
 const apolloServer = new ApolloServer({
@@ -41,7 +44,7 @@ appPool.connect()
         // DB connection for queries.
         app.locals['db'] = pool;
         // Serve static files.
-        app.use(express.static('./src/client/dist/chess/'));
+        app.use(express.static(staticFilesPath));
         // Request body parsing.
         app.use(express.json());
         // Wrapper for 15 middleware function securing HTTP headers
