@@ -15,7 +15,7 @@ const server = http.createServer(app);
 
 const PORT = process.env['PORT'] || 8080;
 
-const staticFilesPath: string = process.env['NODE_ENV'] === 'production' ? './public' : './dist/public';
+const staticFilesPath: string = process.env['NODE_ENV'] === 'production' ? 'D:/home/site/wwwroot/public' : path.resolve('./dist/public');
 
 const config:sql.config = {
     user: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_USERNAME'] : process.env['DEV_DB_USERNAME']),
@@ -44,7 +44,7 @@ appPool.connect()
         // DB connection for queries.
         app.locals['db'] = pool;
         // Serve static files.
-        app.use(express.static(path.resolve(staticFilesPath)));
+        app.use(express.static(staticFilesPath);
         // Request body parsing.
         app.use(express.json());
         // Wrapper for 15 middleware function securing HTTP headers
@@ -58,8 +58,7 @@ appPool.connect()
         app.set('socketio', io);
 
         app.get('/',(req, res) =>{
-            //res.render("index.html");
-            res.send('test');
+            res.render("index.html");
         });
 
         apolloServer.start()
