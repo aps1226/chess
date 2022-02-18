@@ -26,7 +26,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  playNewGame(){
+  playNewGame(event: MouseEvent){
+    event.stopPropagation();
     this.socketService.setupSocketConnection();
     this.matching = true;
     const userName = this.authService.getUserName();

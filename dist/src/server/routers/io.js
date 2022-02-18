@@ -13,12 +13,13 @@ var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var _gamesController = _interopRequireDefault(require("../controllers/gamesController"));
 
 module.exports = function (server, app) {
-  var io = new _socket.Server(server); // Middleware
+  var io = new _socket.Server(server);
+  var accessTokenSecret = String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_ACCESS_TOKEN_SECRET'] : process.env['DEV_ACCESS_TOKEN_SECRET']); // Middleware
   // Authenticate new connection.
 
   io.use(function (socket, next) {
     var token = socket.handshake.auth.token;
-    return _jsonwebtoken.default.verify(token, String(process.env['ACCESS_TOKEN_SECRET']), function (err) {
+    return _jsonwebtoken.default.verify(token, accessTokenSecret, function (err) {
       if (err) return next(new Error('JWT is invalid.'));
       return next();
     });

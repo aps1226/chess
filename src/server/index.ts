@@ -15,7 +15,7 @@ const server = http.createServer(app);
 
 const PORT = process.env['PORT'] || 8080;
 
-const staticFilesPath: string = process.env['NODE_ENV'] === 'production' ? 'src/public' : './dist/src/public';
+const staticFilesPath: string = process.env['NODE_ENV'] === 'production' ? './src/public' : './dist/src/public';
 
 const config:sql.config = {
     user: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_USERNAME'] : process.env['DEV_DB_USERNAME']),
@@ -44,12 +44,12 @@ appPool.connect()
         // DB connection for queries.
         app.locals['db'] = pool;
         // Serve static files.
-        app.use(express.static(staticFilesPath));
+        app.use(express.static(path.resolve(staticFilesPath)));
         // Request body parsing.
         app.use(express.json());
         // Wrapper for 15 middleware function securing HTTP headers
         // returned by app.
-        app.use(helmet());
+        //app.use(helmet());
 
         const usersRouter = require('./routers/usersRouter')(app);
         app.use('/api/users', usersRouter);

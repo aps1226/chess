@@ -15,11 +15,13 @@ module.exports = (server:http.Server, app:Application) =>{
 
     const io = new Server(server);
 
+    const accessTokenSecret = String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_ACCESS_TOKEN_SECRET'] : process.env['DEV_ACCESS_TOKEN_SECRET'] );
+
     // Middleware
     // Authenticate new connection.
     io.use((socket,next) =>{
         const {token} = socket.handshake.auth;
-        return jwt.verify(token, String(process.env['ACCESS_TOKEN_SECRET']), (err: VerifyErrors | null) =>{
+        return jwt.verify(token, accessTokenSecret, (err: VerifyErrors | null) =>{
             if(err) return next( new Error('JWT is invalid.'));
             return next();
         })

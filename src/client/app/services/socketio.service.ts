@@ -31,6 +31,7 @@ export class SocketioService{
   }
 
   setupSocketConnection() {
+    console.log(environment.SOCKET_ENDPOINT)
     // Set up socket connection with the jwt as a credential.
     const auth_tkn = localStorage.getItem('auth_tkn');
     this.socket = io(
