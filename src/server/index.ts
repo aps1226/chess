@@ -58,8 +58,7 @@ appPool.connect()
         app.set('socketio', io);
 
         app.get('/',(req, res) =>{
-            //res.render("index.html");
-            res.send('test');
+            res.render("index.html");
         });
 
         apolloServer.start()
