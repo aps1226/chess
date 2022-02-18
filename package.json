@@ -9,7 +9,7 @@
     "build": "concurrently \"ng build\" \"babel --extensions \".ts\" src/server --out-dir dist/src/server --copy-files --no-copy-ignored\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "clearBabelCache":"rimraf -rf ./node_modules/.cache/babel-loader",
+    "clearBabelCache": "rimraf -rf ./node_modules/.cache/babel-loader",
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "private": true,
@@ -68,6 +68,7 @@
     "@babel/plugin-transform-runtime": "^7.16.10",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.16.7",
+    "@babel/runtime": "^7.17.2",
     "@graphql-codegen/cli": "^2.4.0",
     "@graphql-codegen/typescript": "^2.4.2",
     "@graphql-codegen/typescript-operations": "^2.2.3",
