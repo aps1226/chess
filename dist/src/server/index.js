@@ -6,8 +6,6 @@ var _express = _interopRequireDefault(require("express"));
 
 var _http = _interopRequireDefault(require("http"));
 
-var _path = _interopRequireDefault(require("path"));
-
 var _mssql = _interopRequireDefault(require("mssql"));
 
 var _apolloServerExpress = require("apollo-server-express");
@@ -23,7 +21,7 @@ var app = (0, _express.default)();
 var server = _http.default.createServer(app);
 
 var PORT = process.env['PORT'] || 8080;
-var staticFilesPath = process.env['NODE_ENV'] === 'production' ? '../public' : './dist/src/public';
+var staticFilesPath = process.env['NODE_ENV'] === 'production' ? 'src/public' : './dist/src/public';
 var config = {
   user: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_USERNAME'] : process.env['DEV_DB_USERNAME']),
   password: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_PASSWORD'] : process.env['DEV_DB_PASSWORD']),
@@ -47,7 +45,7 @@ appPool.connect().then(function (pool) {
   // DB connection for queries.
   app.locals['db'] = pool; // Serve static files.
 
-  app.use(_express.default.static(_path.default.resolve(staticFilesPath))); // Request body parsing.
+  app.use(_express.default.static(staticFilesPath)); // Request body parsing.
 
   app.use(_express.default.json()); // Wrapper for 15 middleware function securing HTTP headers
   // returned by app.
