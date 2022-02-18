@@ -6,6 +6,8 @@ var _express = _interopRequireDefault(require("express"));
 
 var _http = _interopRequireDefault(require("http"));
 
+var _path = _interopRequireDefault(require("path"));
+
 var _mssql = _interopRequireDefault(require("mssql"));
 
 var _apolloServerExpress = require("apollo-server-express");
@@ -45,7 +47,7 @@ appPool.connect().then(function (pool) {
   // DB connection for queries.
   app.locals['db'] = pool; // Serve static files.
 
-  app.use(_express.default.static(staticFilesPath)); // Request body parsing.
+  app.use(_express.default.static(_path.default.resolve(staticFilesPath))); // Request body parsing.
 
   app.use(_express.default.json()); // Wrapper for 15 middleware function securing HTTP headers
   // returned by app.

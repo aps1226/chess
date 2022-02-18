@@ -9,7 +9,7 @@
     "build": "npm run clean && ng build && babel --extensions \".ts\" src/server --out-dir dist/src/server --copy-files --no-copy-ignored",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist/src",
     "clearBabelCache": "rimraf -rf ./node_modules/.cache/babel-loader",
     "codegen": "graphql-codegen --config codegen.yml"
   },
