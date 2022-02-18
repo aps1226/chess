@@ -28,6 +28,7 @@
     "@angular/router": "~13.1.0",
     "@apollo/client": "^3.5.8",
     "@auth0/angular-jwt": "^5.0.2",
+    "@babel/runtime": "^7.17.2",
     "@graphql-tools/utils": "^8.6.1",
     "@ngrx/store": "^13.0.2",
     "@types/bcryptjs": "^2.4.2",
