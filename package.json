@@ -84,6 +84,7 @@
     "@types/tedious": "^4.0.6",
     "@types/tedious-connection-pool": "^1.0.3",
     "@typescript-eslint/parser": "^5.10.2",
+    "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-graphql-tag": "^3.3.0",
     "babel-plugin-import-graphql": "^2.8.1",
