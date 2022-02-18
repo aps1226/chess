@@ -12,8 +12,6 @@ var _mssql = _interopRequireDefault(require("mssql"));
 
 var _apolloServerExpress = require("apollo-server-express");
 
-var _helmet = _interopRequireDefault(require("helmet"));
-
 var _schemasMap = _interopRequireDefault(require("./graphql/schemasMap"));
 
 require('dotenv').config();
@@ -23,7 +21,7 @@ var app = (0, _express.default)();
 var server = _http.default.createServer(app);
 
 var PORT = process.env['PORT'] || 8080;
-var staticFilesPath = process.env['NODE_ENV'] === 'production' ? './src/public' : './dist/src/public';
+var staticFilesPath = process.env['NODE_ENV'] === 'production' ? './public' : './dist/public';
 var config = {
   user: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_USERNAME'] : process.env['DEV_DB_USERNAME']),
   password: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_PASSWORD'] : process.env['DEV_DB_PASSWORD']),
@@ -51,8 +49,7 @@ appPool.connect().then(function (pool) {
 
   app.use(_express.default.json()); // Wrapper for 15 middleware function securing HTTP headers
   // returned by app.
-
-  app.use((0, _helmet.default)());
+  //app.use(helmet());
 
   var usersRouter = require('./routers/usersRouter')(app);
 
