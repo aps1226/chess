@@ -21,7 +21,7 @@ var app = (0, _express.default)();
 var server = _http.default.createServer(app);
 
 var PORT = process.env['PORT'] || 8080;
-var staticFilesPath = process.env['NODE_ENV'] === 'production' ? './src/public' : './dist/src/public';
+var staticFilesPath = process.env['NODE_ENV'] === 'production' ? '../public' : './dist/src/public';
 var config = {
   user: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_USERNAME'] : process.env['DEV_DB_USERNAME']),
   password: String(process.env['NODE_ENV'] === 'production' ? process.env['PROD_DB_PASSWORD'] : process.env['DEV_DB_PASSWORD']),
