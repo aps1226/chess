@@ -60,7 +60,8 @@ appPool.connect().then(function (pool) {
 
   app.set('socketio', io);
   app.get('/', function (req, res) {
-    res.render("index.html");
+    //res.render("index.html");
+    res.send('test');
   });
   apolloServer.start().then(function () {
     apolloServer.applyMiddleware({
