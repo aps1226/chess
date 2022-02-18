@@ -44,7 +44,7 @@ appPool.connect()
         // DB connection for queries.
         app.locals['db'] = pool;
         // Serve static files.
-        app.use(express.static(staticFilesPath);
+        app.use(express.static(staticFilesPath));
         // Request body parsing.
         app.use(express.json());
         // Wrapper for 15 middleware function securing HTTP headers
