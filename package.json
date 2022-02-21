@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "main": "./src/server/server.ts",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node dist/src/server/server.js",
+    "start": "cross-env NODE_ENV=production node dist/server.js",
     "dev:client": "ng serve --hmr",
     "dev": "cross-env NODE_ENV=development concurrently \"nodemon src/server/server.ts\" \"npm run watch\" ",
-    "build": "npm run clean && ng build && babel --extensions \".ts\" src/server --out-dir dist/ --copy-files --no-copy-ignored && npm run copy",
+    "build": "cross-env NODE_OPTIONS=--max_old_space_size=16384 npm run clean && ng build && babel --extensions \".ts\" src/server --out-dir dist/ --copy-files --no-copy-ignored && npm run copy",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "clean": "rimraf dist",
