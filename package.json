@@ -11,7 +11,7 @@
     "test": "ng test",
     "clean": "rimraf dist",
     "copyWebConfig": "copyfiles web.config dist/",
-    "copyNodeModules": "copyfiles node_modules dist/",
+    "copyNodeModules": "copyfiles node_modules/**/* dist/",
     "clearBabelCache": "rimraf -rf ./node_modules/.cache/babel-loader",
     "codegen": "graphql-codegen --config codegen.yml"
   },
