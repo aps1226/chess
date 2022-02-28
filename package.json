@@ -6,7 +6,7 @@
     "start": "cross-env NODE_ENV=production node dist/server.js",
     "dev:client": "ng serve --hmr",
     "dev": "cross-env NODE_ENV=development concurrently \"nodemon src/server/server.ts\" \"npm run watch\" ",
-    "build": "cross-env NODE_OPTIONS=--max_old_space_size=5120 npm run clean && ng build && babel --extensions \".ts\" src/server --out-dir dist/ --copy-files --no-copy-ignored && npm run copyWebConfig && npm run copyNodeModules",
+    "build": "cross-env NODE_OPTIONS=--max_old_space_size=8142 npm run clean && ng build && babel --extensions \".ts\" src/server --out-dir dist/ --copy-files --no-copy-ignored && npm run copyWebConfig && npm run copyNodeModules",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "clean": "rimraf dist",
